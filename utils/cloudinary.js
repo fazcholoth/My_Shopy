@@ -8,7 +8,7 @@ module.exports=cloudinary.config({
   api_secret: process.env.CLOUDINARY_SECRET
 });
 
-var a
+
 
  
 
