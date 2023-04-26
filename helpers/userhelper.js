@@ -55,7 +55,6 @@ module.exports = {
     });
   },
   getHome: (page) => {
-    var l
     const itemsperPage = 3;
     const currentpage = page || 1;
     console.log(page);
