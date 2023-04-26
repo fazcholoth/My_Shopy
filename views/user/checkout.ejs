@@ -1,0 +1,285 @@
+
+
+<%-include('../partials/userheader')-%>
+
+
+<main class="main" >
+  <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+    <div class="container">
+      <h1 class="page-title">Checkout</h1>
+    </div><!-- End .container -->
+  </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="page-content">
+      <div class="checkout">
+          <div class="container">
+            <div style="display: flex; justify-content: space-between;">
+              <form id="coupen-form" action="" method="" style="display: flex; align-items: center;">
+                <div class="form-group">
+                  <label for="coupon-code">Coupon Code</label>
+                  <input type="text" style="width: 200px;" class="form-control" id="couponcode" name="couponcode" placeholder="Enter coupon code">
+                </div>
+                <button type="submit" style="width: 200px;" class="btn btn-primary">Apply Coupon</button>
+              </form>
+            
+              <a href="/view-coupons" style="display: flex; align-items: center;">
+                <button class="btn btn-success">View Coupons</button>
+              </a>
+            </div>
+            
+          
+          
+          <form action="" id="checkout-out-form">
+              <div class="row">
+                <div class="col-lg-9">
+                  <% if (addresses.length > 0) { %>
+                    <h4 class="mb-3">Select Address</h4>
+                    <div class="row">
+                      <% addresses.forEach(function(address,index) { %>
+                        <div class="col-md-6 mb-4">
+                          <div class="card">
+                            <div class="card-body" style="background-color: rgb(226, 231, 230);">
+                              <h5 class="card-title"><i class="fas fa-map-marker-alt"></i> Address <%=index+1 %></h5>
+                              <p><%= address.city %></p>
+                              <p class="card-text"><%= address.street %><br>
+                              <%= address.city %><br>
+                              <%= address.phone %><br>
+                              <%= address.country %><br></p>
+                        
+                              <div class="form-check">
+                                <input class="form-check-input" type="radio" name="address" id="<%= address._id %>" value="<%= address._id %>" required>
+                                <label class="form-check-label" for="<%= address._id %>">
+                                  Select this address
+                                </label>
+                              </div>
+                                                      
+                              <div class="d-flex">
+                                <a href="/edit-address/<%=address._id%>"><button type="button" style="width: 50px;" class="btn btn-primary sm">Edit Address</button></a>.
+                                <a href="/delete-address/<%=address._id%>"><button type="button" class="btn btn-danger">Delete Address</button></a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                      <% }); %>
+                    </div>
+                    <a href="/add-address" class="btn btn-primary mt-3">Add New Address</a>
+                  <% } else { %>
+                    <div class="alert alert-warning">You have no saved addresses. <a href="/add-address">Add an address</a>.</div>
+                  <% } %>
+                </div>
+                
+                
+                
+                
+                <aside class="col-lg-3">
+                  
+                    
+                  
+                  
+                  <div class="summary">
+                    <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
+
+                    <table class="table table-summary">
+                      <thead>
+                        <tr>
+                          <th>Product</th>
+                          <th>Total</th>
+                        </tr>
+                      </thead>
+                      
+                      <tbody>
+                        <% product.forEach(function(product, index) { %>
+                        <tr>
+                          <td><a href="#"><%=product.name%>(<%=product.quantity%>)</a></td>
+                          <td><%=product.total%></td>
+                        </tr>
+                        <% })%>
+                        <tr class="summary-subtotal">
+                          <td>Subtotal:</td>
+                          <td><%=subtotal%></td>
+                        </tr><!-- End .summary-subtotal -->
+                        <tr>
+                          <td>Discount</td>
+                          <td id="discount">0</td>
+                        </tr>
+                        <tr class="summary-total">
+                          <td>Total:</td>
+                          <td id="subtotal"><%=subtotal%></td>
+                        </tr><!-- End .summary-total -->
+                      </tbody>
+                    </table><!-- End .table table-summary -->
+
+                    <div class="accordion-summary" id="accordion-payment">
+                      
+                        <div class="form-group">
+                            
+                                <input type="hidden" id="discounttotal" value="<%=subtotal%>" name="total">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="paymentmethod" id="payment-method-2" value="upi-transaction" required>
+                                <label class="form-check-label" for="payment-method-2">
+                                    UPI 
+                                </label>
+                            </div>
+                    
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio"  name="paymentmethod" id="payment-method-3" value="cash-on-delivery" required>
+                                <label class="form-check-label" for="payment-method-3">
+                                    Cash on delivery
+                                </label>
+                            </div>
+                          
+                    
+                           
+                    
+                            
+                        </div>
+                    
+                    <!-- End .card -->
+            </div><!-- End .accordion -->
+
+                    <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
+                      <span class="btn-text">Place Order</span>
+                      <span class="btn-hover-text">Proceed to Checkout</span>
+                    </button>
+                  </div><!-- End .summary -->
+                
+                </aside><!-- End .col-lg-3 -->
+              </div><!-- End .row -->
+          </form>
+          </div><!-- End .container -->
+        </div><!-- End .checkout -->
+    </div><!-- End .page-content -->
+</main><!-- End .main -->
+
+
+
+
+
+  
+               
+  
+
+
+
+<%-include('../partials/userfooter')-%>
+
+
+<script>
+
+$("#coupen-form").submit((e) => {
+    e.preventDefault();
+    $.ajax({
+      url: '/apply-coupen',
+      method: 'POST',
+      data: $('#coupen-form').serialize(),
+      success: (response) => {
+        document.getElementById('discount').innerHTML=response.discount
+        document.getElementById('subtotal').innerHTML=response.total
+        const total= document.getElementById('discounttotal')
+        total.value=response.total
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }); 
+
+
+
+
+
+
+
+
+  
+
+  $("#checkout-out-form").submit((e) => {
+    e.preventDefault();
+    $.ajax({
+      url: '/check-Out',
+      method: 'POST',
+      data: $('#checkout-out-form').serialize(),
+      success: (response) => {
+        if(response.product){
+          alert(response.balance)
+          alert(response.product)
+        }else if(response.codsuccess){
+          location.href='/order-Success'
+        }else{
+          razorpayPayment(response)
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }); 
+
+
+  function razorpayPayment(order) {
+    const total= document.getElementById('discounttotal')
+    var options = {
+    "key": "rzp_test_djoEuAhlh9AKso", // Enter the Key ID generated from the Dashboard
+    "amount": total*100, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    "currency": "INR",
+    "name": "Eshope", //your business name
+    "description": "Test Transaction",
+    "image": "https://example.com/your_logo",
+    "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    "handler": function (response){
+        alert(response.razorpay_payment_id);
+        alert(response.razorpay_order_id);
+        alert(response.razorpay_signature)
+
+        verifyPayment(response,order)
+
+    },
+    "prefill": {
+        "name": "Gaurav Kumar", //your customer's name
+        "email": "gaurav.kumar@example.com",
+        "contact": "7510630130"
+    },
+    "notes": {
+        "address": "Razorpay Corporate Office"
+    },
+    "theme": {
+        "color": "#3399cc"
+    },
+  };
+
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+  }  
+
+
+
+
+  function verifyPayment(payment, order) {
+  $.ajax({
+    url: '/verify-payment',
+    data: {
+      payment,
+      order
+    },
+    method: 'post',
+    success:(response)=>{
+      if(response.status){
+        location.href='/order-Success'
+      }else{
+        alert('payment Failed')
+      }
+    }
+  });
+}
+
+</script>

@@ -1,0 +1,80 @@
+<%-include('../partials/adminheader')-%>
+
+<div class="main-wrap">
+  <h1 class="text-center">Coupons</h1>
+  <div class="row">
+    <div class="col-md-3">
+      <form action="/admin/add-coupon" method="POST">
+        <div class="form-group">
+          <label for="coupon-title">Coupon title</label>
+          <input
+            type="text"
+            class="form-control"
+            id="coupon-title"
+            placeholder="Enter coupon title"
+            name="title"
+          />
+        </div>
+        <div class="form-group">
+          <label for="discount-amount">Discount Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            id="coupon-discount"
+            placeholder="Discount Amount "
+            name="discount"
+          />
+        </div>
+        <div class="form-group">
+          <label for="coupon-code">Coupon code</label>
+          <input
+            type="text"
+            class="form-control"
+            id="coupon-code"
+            placeholder="Enter coupon code"
+            name="coupencode"
+          />
+        </div>
+        <div class="form-group">
+          <label for="coupon-expiry">Coupon expiry date</label>
+          <input
+            type="date"
+            class="form-control"
+            id="coupon-expiry"
+            name="expirydate"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Add coupon</button>
+      </form>
+    </div>
+    <div class="col-md-9">
+      <div class="container">
+        <div class="row">
+          <% coupen.forEach(function(coupen,index) { %>
+          <div class="col-lg-4 col-md-6 mb-3">
+            <div class="card coupon-card">
+              <div class="card-header coupon-header bg-dark">
+                <h5 class="mb-0" style="color: aquamarine;"><%=coupen.coupentitle%></h5>
+              </div>
+              <div
+                class="card-body"
+                style="background-color: rgb(177, 190, 190)"
+              >
+              <p class="card-text coupon-description">
+                Code:  <%=coupen.coupencode%> 
+              </p>
+                <p class="card-text coupon-description">
+                  Flat <%=coupen.discount%> Rupees Discount
+                </p>
+                <small class="coupon-validity"
+                  >Expiry Date:<%=coupen.expirydate%></small
+                >
+              </div>
+            </div>
+          </div>
+          <% })%>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

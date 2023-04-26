@@ -1,0 +1,197 @@
+
+<%-include('../partials/adminheader')-%>
+<div class="main-wrap">
+  <div class="table-container">
+        <div class="table-responsive">
+          <table id="orderTable" class="table align-middle table-nowrap mb-0">
+            <thead>
+              <tr>
+                <th style="width: 120px;">Order ID</th>
+                <th style="width: 120px;">User ID</th>
+                <th style="width: 120px;">Date</th>
+                <th>Payment Method</th>
+                <th>Payment Status</th>
+                <th>Order Status</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% orders.forEach(function(order, index) { %>
+              <tr>
+                <td><%= order._id %></td>
+                <td><%= order.userId._id %></td>
+                <td><%= order.orderDate %></td>
+                <td><%= order.paymentmethod %></td>
+                <td><%= order.paymentstatus %></td>
+                <td><%= order.status%></td>
+                <td>
+                    <% if (order.status === "placed") { %>
+                      <button class="btn btn-primary btn-sm" onclick="shipOrder('<%=order._id%>')" >Shipped</button><br><br>
+                      <button class="btn btn-danger btn-sm" onclick="cancelOrder('<%=order._id%>')" >Cancel</button>
+                    <% } %>
+                    <% if (order.status === "shipped") { %>
+                        <button class="btn btn-primary btn-sm" onclick="deliverOrder('<%=order._id%>')"   >Delivered</button><br><br>
+                        <button class="btn btn-danger btn-sm" onclick="cancelOrder('<%=order._id%>')"  >Cancel</button>
+                      <% } %>
+                      <% if (order.status === "cancelled") { %>
+                        
+                    <% } %> 
+                    <% if (order.status === "returned"&&order.paymentstatus==="paid") { %>
+                        <button class="btn btn-danger btn-sm" onclick="approveReturn('<%=order.userId%>','<%=order.total%>')">Approve</button>
+                        <% } %> 
+                  </td>
+                  <td>
+                    <a href="/admin/order-details/<%=order._id%>"><button class="btn btn-success btn-sm" >Details</button></a>
+                  </td>               
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div> 
+
+      
+</div>
+
+<style>
+ .btn-sm {
+  width: 120px;
+  height: 35px;
+}
+</style>
+
+
+<script>
+    function cancelOrder( orderid) {
+      $.ajax({
+        url: '/admin/cancel-order',
+        data: {
+          orderId: orderid,
+        },
+        method: 'post',
+        success: (response) => {
+            alert("order cancelled")
+            location.reload()
+        }
+      });
+    }
+
+
+
+    function shipOrder( orderid) {
+      $.ajax({
+        url: '/admin/ship-order',
+        data: {
+          orderId: orderid,
+        },
+        method: 'post',
+        success: (response) => {
+            alert("order shipped")
+            location.reload()
+        }
+      });
+    }
+
+    function deliverOrder( orderid) {
+      $.ajax({
+        url: '/admin/deliver-order',
+        data: {
+          orderId: orderid,
+        },
+        method: 'post',
+        success: (response) => {
+            alert("order delivered")
+            location.reload()
+        }
+      });
+    }
+
+    function approveReturn(userId,total) {
+        total=parseInt(total)
+      $.ajax({
+        url: '/admin/approve-return',
+        data: {
+          userId:userId,
+          amount:total
+        },
+        method: 'post',
+        success: (response) => {
+            alert("return approved")
+            location.reload()
+        }
+      });
+    }
+
+  </script>
+
+<link
+  rel="stylesheet"
+  href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap4.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css"
+/>
+<script
+  type="text/javascript"
+  charset="utf8"
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
+></script>
+
+<script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
+
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+
+
+<!-- data table cdn -->
+
+<script src="/assets/js/vendors/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
+<!-- data table cdn -->
+
+
+
+<!-- DataTables CSS -->
+
+
+<!-- jQuery -->
+
+
+<!-- DataTables JavaScript -->
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.24/b-1.7.0/b-html5-1.7.0/datatables.min.js"></script>
+
+<!-- DataTables Buttons JavaScript -->
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
+
+
+
+
+<script>
+  $(document).ready(function () {
+    $("#orderTable").DataTable({
+      dom: "Bfrtip",
+      buttons: ["excel", "pdf"],
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    $("#orderTable").DataTable();
+  });
+</script>

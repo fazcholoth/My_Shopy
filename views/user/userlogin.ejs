@@ -1,0 +1,345 @@
+<!-- Plugins CSS File -->
+<link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+<link rel="stylesheet" href="../../assets/css/plugins/owl-carousel/owl.carousel.css">
+<link rel="stylesheet" href="../../assets/css/plugins/magnific-popup/magnific-popup.css">
+<link rel="stylesheet" href="../../assets/css/plugins/magnific-popup/magnific-popup.css">
+<link rel="stylesheet" href="../../assets/css/plugins/magnific-popup/magnific-popup.css">
+<link rel="stylesheet" href="../../assets/css/plugins/magnific-popup/magnific-popup.css">
+<link rel="stylesheet" href="../../assets/css/plugins/jquery.countdown.css">
+
+<!-- Main CSS File -->
+<link rel="stylesheet" href="../../assets/css/style.css">
+<link rel="stylesheet" href="../../assets/css/skins/skin-demo-6.css">
+<link rel="stylesheet" href="../../assets/css/demos/demo-6.css">
+<link rel="stylesheet" href="../../assets/css/style.css">
+<link rel="stylesheet" href="../../assets/css/plugins/nouislider/nouislider.css">
+<main class="main">
+  <nav aria-label="breadcrumb" class="breadcrumb-nav border-0 mb-0">
+    <div class="container">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+        <li class="breadcrumb-item"><a href="#">Pages</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Login</li>
+      </ol>
+    </div>
+    <!-- End .container -->
+  </nav>
+  <!-- End .breadcrumb-nav -->
+
+  <div
+    class="login-page bg-image pt-8 pb-8 pt-md-12 pb-md-12 pt-lg-17 pb-lg-17"
+    style="background-image: url('assets/images/backgrounds/login-bg.jpg')"
+  >
+    <div class="container">
+      <div class="form-box">
+        <div class="form-tab">
+          <ul class="nav nav-pills nav-fill" role="tablist">
+            <li class="nav-item">
+              <a
+                class="nav-link"
+                id="signin-tab-2"
+                data-toggle="tab"
+                href="#signin-2"
+                role="tab"
+                aria-controls="signin-2"
+                aria-selected="false"
+                >Sign In</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link active"
+                id="register-tab-2"
+                data-toggle="tab"
+                href="#register-2"
+                role="tab"
+                aria-controls="register-2"
+                aria-selected="true"
+                >Register</a
+              >
+            </li>
+          </ul>
+          <div class="tab-content">
+            <div
+              class="tab-pane fade"
+              id="signin-2"
+              role="tabpanel"
+              aria-labelledby="signin-tab-2"
+            >
+              <form action="/login" id="login-form" method="POST">
+                <div class="form-group">
+                  <label for="singin-email-2"
+                    >Username or email address *</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="email-1"
+                    name="email"
+                    value="fazil@gmail.com"
+                  />
+                  <span
+                    id="email-error"
+                    class="validation"
+                    style="color: red"
+                  ></span>
+                </div>
+                <!-- End .form-group -->
+
+                <div class="form-group">
+                  <label for="singin-password-2">Password *</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password-1"
+                    name="password"
+                    value="Fazil12345"
+                  />
+                  <span
+                    id="password-error"
+                    class="validation"
+                    style="color: red"
+                  ></span>
+                </div>
+                <!-- End .form-group -->
+              
+                <div class="form-footer">
+                  <button type="submit" class="btn btn-outline-primary-2">
+                    <span>LOG IN</span>
+                    <i class="icon-long-arrow-right"></i>
+                  </button>
+                </div>
+               
+              </form>
+                <% if (loginError) { %> 
+                  <p><%=loginError%><p>
+                  <% } %> 
+              
+      <a href="/otp-login">Login with OTP</a>
+      
+            </div>
+            <!-- .End .tab-pane -->
+            <div
+              class="tab-pane fade show active"
+              id="register-2"
+              role="tabpanel"
+              aria-labelledby="register-tab-2"
+            >
+              <form action="/signup" method="POST" id="signup-form">
+                <div class="form-group">
+                  <label for="register-email-2">Name *</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="name-2"
+                    name="username"
+                    required
+                  />
+                  <span
+                  id="Name-error"
+                  class="validation"
+                  style="color: red"
+                ></span>
+                </div>
+                <!-- End .form-group -->
+
+                <div class="form-group">
+                  <label for="register-email-2">Your email address *</label>
+                  <input
+                    type=""
+                    class="form-control"
+                    id="email-2"
+                    name="email"
+                    
+                  />
+                  <span
+                    id="Email-error"
+                    class="validation"
+                    style="color: red"
+                  ></span>
+                </div>
+                <!-- End .form-group -->
+
+                <div class="form-group">
+                  <label for="register-email-2">Your phone number *</label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="phone-2"
+                    name="phonenumber"
+                  
+                  />
+                  <span
+                    id="Phone-error"
+                    class="validation"
+                    style="color: red"
+                  ></span>
+                </div>
+                <!-- End .form-group -->
+
+                <div class="form-group">
+                  <label for="register-password-2">Password *</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="password-2"
+                    name="password"
+                  />
+                  <span
+                    id="Password-error"
+                    class="validation"
+                    style="color: red"
+                  ></span>
+                </div>
+                <!-- End .form-group -->
+
+                <div class="form-footer">
+                  <button type="submit" class="btn btn-outline-primary-2">
+                    <span>SIGN UP</span>
+                    <i class="icon-long-arrow-right"></i>
+                  </button>
+
+                  <div class="custom-control custom-checkbox"></div>
+                  <!-- End .custom-checkbox -->
+                </div>
+                <!-- End .form-footer -->
+              </form>
+            </div>
+            <!-- .End .tab-pane -->
+          </div>
+          <!-- End .tab-content -->
+        </div>
+        <!-- End .form-tab -->
+      </div>
+      <!-- End .form-box -->
+    </div>
+    <!-- End .container -->
+  </div>
+  <!-- End .login-page section-bg -->
+</main>
+<!-- End .main -->
+
+<%-include('../partials/userfooter')-%>
+
+<script>// Get the form and the email and password fields
+  const form = document.getElementById('login-form');
+  const emailInput = document.getElementById('email-1');
+  const passwordInput = document.getElementById('password-1');
+  const emailError = document.getElementById('email-error');
+  const passwordError = document.getElementById('password-error');
+  
+  // Add event listener to the form submit event
+  form.addEventListener('submit', function(event) {
+    // Prevent the default form submit behavior
+    event.preventDefault();
+  
+    // Reset the error messages
+    emailError.innerText = '';
+    passwordError.innerText = '';
+  
+    // Check if the email field is not empty and has a valid email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailInput.value) {
+      emailError.innerText = 'Email is required';
+    } else if (!emailRegex.test(emailInput.value)) {
+      emailError.innerText = 'Invalid email format';
+    }
+  
+    // Check if the password field is not empty and meets the complexity requirements
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    if (!passwordInput.value) {
+      passwordError.innerText = 'Password is required';
+    } else if (!passwordRegex.test(passwordInput.value)) {
+      passwordError.innerText = 'Password should contain at least 1 upper case letter, 1 lower case letter and be at least 8 characters long';
+    }
+  
+    // Submit the form if there are no errors
+    if (!emailError.innerText && !passwordError.innerText) {
+      form.submit();
+    }
+  })
+
+</script>
+
+
+
+
+
+ 
+  <script>
+  function validateForm() {
+    // Get the values of the input fields
+    var name = document.getElementById("name-2").value;
+    var email = document.getElementById("email-2").value;
+    var phone = document.getElementById("phone-2").value;
+    var password = document.getElementById("password-2").value;
+
+    // Check if all fields are filled out
+    if (name == "" || email == "" || phone == "" || password == "") {
+      document.getElementById("Name-error").innerHTML =
+        "Please fill out all fields";
+      document.getElementById("Email-error").innerHTML =
+        "Please fill out all fields";
+      document.getElementById("Phone-error").innerHTML =
+        "Please fill out all fields";
+      document.getElementById("Password-error").innerHTML =
+        "Please fill out all fields";
+      return false;
+    }
+
+    // Check if name only contains letters
+    if (!/^[a-zA-Z]+$/.test(name)) {
+      document.getElementById("Name-error").innerHTML =
+        "Name should only contain letters";
+      return false;
+    }
+
+    // Check if email is in valid format
+    if (!/^\S+@\S+\.\S+$/.test(email)) {
+      document.getElementById("Email-error").innerHTML =
+        "Please enter a valid email address";
+      return false;
+    }
+
+    // Check if phone number is in valid format
+    if (!/^\d{10}$/.test(phone)) {
+      document.getElementById("Phone-error").innerHTML =
+        "Please enter a valid phone number";
+      return false;
+    }
+
+    // Check if password contains at least one upper case, one lower case, and is 8 characters long
+    if (!/(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/.test(password)) {
+      document.getElementById("Password-error").innerHTML =
+        "Password should contain at least one upper case, one lower case, and be 8 characters long";
+      return false;
+    }
+
+    // If all fields pass validation, submit the form
+    return true;
+  }
+
+  // Add event listener to form submit
+  document.getElementById("signup-form").addEventListener("submit", function (event) {
+    if (!validateForm()) {
+      event.preventDefault();
+    }
+  });
+</script>
+
+
+<script src="../../assets/js/jquery.min.js"></script>
+  <script src="../../assets/js/bootstrap.bundle.min.js"></script>
+  <script src="../../assets/js/jquery.hoverIntent.min.js"></script>
+  <script src="../../assets/js/jquery.waypoints.min.js"></script>
+  <script src="../../assets/js/superfish.min.js"></script>
+  <script src="../../assets/js/owl.carousel.min.js"></script>
+  <script src="../../assets/js/bootstrap-input-spinner.js"></script>
+  <script src="../../assets/js/jquery.plugin.min.js"></script>
+  <script src="../../assets/js/jquery.magnific-popup.min.js"></script>
+  <script src="../../assets/js/jquery.countdown.min.js"></script>
+  <script src="../../assets/js/jquery.elevateZoom.min.js"></script>
+  <!-- Main JS File -->
+  <script src="../../assets/js/main.js"></script>
+  <script src="../../assets/js/demos/demo-6.js"></script>
+

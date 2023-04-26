@@ -1,0 +1,117 @@
+<%-include('../partials/userheader')-%>
+<div class="container">
+    <div class="row my-5">
+      <div class="col-lg-10 m-auto">
+        <div class="row d-flex justify-content-center">
+          <div class="col-lg-8">
+            <div class="login_wrap widget-taber-content p-30 background-white border-radius-5">
+              <div class="padding_eight_all bg-white" style="min-height: 400px;">
+                <div class="heading_s1">
+                  <h3 class="mb-30">Enter OTP</h3>
+                </div>
+  
+                <form   id="my-form" action="/verify-otp" method="">
+                  <div class="form-group">
+                    <input type="text" required="" id="otp" name="otp" placeholder="Enter OTP" class="form-control">
+                  </div>
+                  <span id="error-message" class="text-danger"></span>
+                  <div class="form-group text-center">
+                    <button type="submit" class="btn btn-primary btn-block" onclick="verifyOtp()">Verify</button>
+                  </div>
+                </form>
+              
+                <div class="text-center mt-4"  style="display: inline-block;" id="timer">
+                  00:60 
+                </div>
+                <div class="text-center mt-4" style=" width: 35; display: inline-block; justify-content: center;">
+                  <a href="/resend-otp"><button id="myButton" class="btn btn-success"  style="display: none;">Resend OTP</button></a>
+                
+              </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <%-include('../partials/userfooter')-%>
+  
+<style>
+  #timer {
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 1rem;
+  background-color: #f8f8f8;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  width: 5rem;
+}
+</style>
+
+
+
+  <script>
+  function verifyOtp() {
+  event.preventDefault();
+  var Otp = $('#otp').val();
+  $.ajax({
+    url: "/verify-otp",
+    method: 'post',
+    contentType: 'application/x-www-form-urlencoded',
+    data: { otp: Otp },
+    success: function(response) {
+      if (response.status) {
+        $("#my-form").submit();
+          location.href = '/';
+        } else {
+        $("#error-message").html('OTP number not matched');
+      }
+    },
+    error: function() {
+      $("#error-message").html('Error verifying OTP');
+    }
+  });
+}
+
+
+
+
+  var timer = null; // declare a variable to store the timer ID
+  
+  function startTimer(duration, display) {
+    var timerValue = duration;
+    var seconds;
+    timer = setInterval(function() {
+      seconds = parseInt(timerValue % 60, 10);
+      seconds = seconds < 10 ? "0" + seconds : seconds;
+      
+      display.textContent = "00:" + seconds;
+      
+      if (--timerValue < 0) {
+        clearInterval(timer);
+        // replace this with your own code to handle the end of the timer
+      }
+    }, 1000); // 1000ms = 1 second
+  }
+  
+  var timerDisplay = document.getElementById("timer");
+  startTimer(60, timerDisplay); // start a timer for 1 minute (60 seconds)
+
+
+
+
+  
+    // Set timeout function to wait for 5 seconds
+    setTimeout(function() {
+        document.getElementById("myButton").style.display = "block";
+    }, 60000); // 5000ms = 5 seconds
+
+
+
+
+
+
+
+    
+  </script>

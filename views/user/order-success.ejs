@@ -1,0 +1,73 @@
+
+
+
+<%-include('../partials/userheader')-%>
+
+
+
+<div class="main-wrap"></div>
+    <title>Order Success</title>
+    <style>
+      /* CSS for the success card */
+      .card {
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 30px;
+        text-align: center;
+        font-family: Arial, sans-serif;
+      }
+      
+      /* CSS for the success icon */
+      .success-icon {
+        height: 100px;
+        width: 100px;
+        border-radius: 50%;
+        background-color: #5cb85c;
+        margin: 0 auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 60px;
+        color: #fff;
+      }
+      
+      /* CSS for the view orders button */
+      .btn-success {
+        background-color: #5cb85c;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 18px;
+        margin-top: 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+      
+      /* CSS for the view orders button hover state */
+      .btn-success:hover {
+        background-color: #449d44;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="success-icon">
+        <i class="fas fa-check"></i>
+      </div>
+      <h1>Thank you for your order!</h1>
+      <p>Your order has been received and is being processed. You will receive a confirmation email shortly.</p>
+      <a href="/view-orders"><button class="btn-success">View Orders</button></a>
+    </div>
+  </body>
+
+
+
+
+<%-include('../partials/userfooter')-%>

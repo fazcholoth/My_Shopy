@@ -1,0 +1,145 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:32 GMT -->
+<head>
+    <meta charset="utf-8">
+    <title>Evara Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href=".../../adminassets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href=".../../adminassets/css/main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+  
+  <%-include('../partials/adminheader')-%>
+    
+    <main class="main-wrap" style="width:100%;">
+        <section class="content-main">
+            <div class="row">
+                <div class="col-6">
+                    <div class="content-header">
+                        <h2 class="content-title">Edit Product</h2>
+                        <div>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6>1. General info</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <form action="/admin/edit-product/<%=productdata._id%>"
+                                         method="POST"  enctype="multipart/form-data">
+                                        <label class="form-label">Product title</label>
+                                        <input type="text" placeholder="Type here" name="name" class="form-control" value="<%=productdata.Productname%>">
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Description</label>
+                                        <textarea type="text" placeholder="Type here" name="description" class="form-control" value="<%=productdata.ProductDescription%> rows="4"></textarea>
+                                    </div>
+                                    
+                                </div> <!-- col.// -->
+                            </div> <!-- row.// -->
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6>2. Quantity</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <label class="form-label">available quantity</label>
+                                        <input type="text" placeholder="quantity" name="quantity" class="form-control">
+                                        <span id="quantityError" class="validation" style="color: red;"></span>
+                                    </div>
+                                </div> <!-- col.// -->
+                            </div>
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6>2. Pricing</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <label class="form-label">Cost in USD</label>
+                                        <input type="text" placeholder="$00.0" name="price" class="form-control" value="<%=productdata.Price%>" >
+                                    </div>
+                                </div> <!-- col.// -->
+                            </div> <!-- row.// -->
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6>3. Category</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <% catdata.forEach(function(catdata) { %>
+                                        <label class="mb-2 form-check form-check-inline" style="width: 45%;">
+                                            <input class="form-check-input" checked="" name="category" value="<%= catdata.Categoryname%>" type="radio">
+                                            <span class="form-check-label"><%= catdata.Categoryname%></span>
+                                        </label>
+                                        <% }) %>
+                                    </div>
+                                </div> <!-- col.// -->
+                            </div> <!-- row.// -->
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6>4. Media</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <label class="form-label"></label>
+                                        <input class="form-control" type="file" name="Image2" multiple value="<%=productdata.Image%>">
+                                    </div>
+                                    
+                                </div> <!-- col.// -->
+                            </div> <!-- .row end// -->
+                            <button type="submit" class="btn btn-success mt-4">Submit</button>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    
+    <!-- Main Script -->
+    
+    
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:32 GMT -->
+</html>

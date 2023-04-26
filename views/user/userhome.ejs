@@ -1,0 +1,258 @@
+
+<%-include('../partials/userheader')-%>
+<body >
+    <div class="page-wrapper" >
+        
+
+        <main class="main">
+            <div class="intro-slider-container">
+                <div class="intro-slider owl-carousel owl-theme owl-nav-inside owl-light" data-toggle="owl" data-owl-options='{
+                        "dots": false,
+                        "nav": false, 
+                        "responsive": {
+                            "992": {
+                                "nav": true
+                            }
+                        }
+                    }'>
+                    <div class="intro-slide" style="background-image: url(assets/images/demos/demo-6/slider/slide-1.jpg);">
+                        <div class="container intro-content text-center">
+                            <h3 class="intro-subtitle text-white">You're Looking Good</h3><!-- End .h3 intro-subtitle -->
+                            <h1 class="intro-title text-white">New Lookbook</h1><!-- End .intro-title -->
+
+                            <a href="category.html" class="btn btn-outline-white-4">
+                                <span>Discover More</span>
+                            </a>
+                        </div><!-- End .intro-content -->
+                    </div><!-- End .intro-slide -->
+
+                    <div class="intro-slide" style="background-image: url(assets/images/demos/demo-6/slider/slide-2.jpg);">
+                        <div class="container intro-content text-center">
+                            <h3 class="intro-subtitle text-white">Don’t Miss</h3><!-- End .h3 intro-subtitle -->
+                            <h1 class="intro-title text-white">Mysrety Deals</h1><!-- End .intro-title -->
+
+                            <a href="category.html" class="btn btn-outline-white-4">
+                                <span>Discover More</span>
+                            </a>
+                        </div><!-- End .intro-content -->
+                    </div><!-- End .intro-slide -->
+                </div><!-- End .intro-slider owl-carousel owl-theme -->
+
+                <span class="slider-loader"></span><!-- End .slider-loader -->
+            </div><!-- End .intro-slider-container -->
+
+            <div class="pt-2 pb-3">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="banner banner-overlay">
+                                <a href="#">
+                                    <img src=".../../assets/images/demos/demo-6/banners/banner-1.jpg" alt="Banner">
+                                </a>
+
+                                <div class="banner-content banner-content-center">
+                                    <h4 class="banner-subtitle text-white"><a href="#">New in</a></h4><!-- End .banner-subtitle -->
+                                    <h3 class="banner-title text-white"><a href="#"><strong>Women’s</strong></h3><!-- End .banner-title -->
+                                    <a href="#" class="btn btn-outline-white banner-link underline">Shop Now</a>
+                                </div><!-- End .banner-content -->
+                            </div><!-- End .banner -->
+                        </div><!-- End .col-sm-6 -->
+
+                        <div class="col-sm-6">
+                            <div class="banner banner-overlay">
+                                <a href="#">
+                                    <img src="assets/images/demos/demo-6/banners/banner-2.jpg" alt="Banner">
+                                </a>
+
+                                <div class="banner-content banner-content-center">
+                                    <h4 class="banner-subtitle text-white"><a href="#">New in</a></h4><!-- End .banner-subtitle -->
+                                    <h3 class="banner-title text-white"><a href="#"><strong>Men’s</strong></a></h3><!-- End .banner-title -->
+                                    <a href="#" class="btn btn-outline-white banner-link underline">Shop Now</a>
+                                </div><!-- End .banner-content -->
+                            </div><!-- End .banner -->
+                        </div><!-- End .col-sm-6 -->
+                    </div><!-- End .row -->
+                    <hr class="mt-0 mb-0">
+                </div><!-- End .container -->
+            </div><!-- End .bg-gray -->
+
+            <div class="mb-5"></div><!-- End .mb-5 -->
+            <div class="container">
+                <div class="heading heading-center mb-3">
+                    <h2 class="title">Trending</h2><!-- End .title -->
+
+                    <ul class="nav nav-pills justify-content-center" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="trending-all-link" data-toggle="tab" href="#trending-all-tab" role="tab" aria-controls="trending-all-tab" aria-selected="true">All</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="trending-women-link" data-toggle="tab" href="#trending-women-tab" role="tab" aria-controls="trending-women-tab" aria-selected="false">Women</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="trending-men-link" data-toggle="tab" href="#trending-men-tab" role="tab" aria-controls="trending-men-tab" aria-selected="false">Men</a>
+                        </li>
+                    </ul>
+                </div><!-- End .heading -->
+
+
+
+                <div class="row">
+                    <% prodata.forEach(function(prodata, index) { %>
+                        <div class="col-6 col-md-4 col-lg-4 col-xl-3">
+                        <div class="product product-7 text-center">
+                        <figure class="product-media">
+                        <a href="/product-detail/<%= prodata._id %>">
+                        <img src="<%= prodata.Image[0] %>" alt="Product image" class="product-image">
+                        </a>
+                        <div class="product-action-vertical">
+                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>Add to Wishlist</span></a>
+                        <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+                        <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                        </div><!-- End .product-action-vertical -->
+                        <div class="product-action">
+                        <button class="btn-product btn-cart" onclick="addTocart('<%=prodata._id%>')">
+                        <span>Add to Cart</span>
+                        </button>
+                        </div><!-- End .product-action -->
+                        </figure><!-- End .product-media -->
+                        <div style="background-color: rgb(233, 237, 237);" class="product-body">
+                        <div class="product-cat">
+                        <a href="#"><%= prodata.Category %></a>
+                        </div><!-- End .product-cat -->
+                        <h3 class="product-title"><a href="/product-detail/<%= prodata._id %>"><%= prodata.Productname %></a></h3><!-- End .product-title -->
+                        <% if (prodata.Firstprice==0) { %>
+                            <div class="product-price">
+                                <p>
+                                    <%= prodata.Price %>
+                                </p>
+                                  
+
+                            </div>
+                            <% } else { %>   
+                            <div class="product-price">
+                                <p>
+                                    <span style="text-decoration: line-through;"><%= prodata.Firstprice %></span> Discount Rate <%= prodata.Price %>
+                                </p>
+                                  
+
+                            </div>
+                        
+                        <% } %> 
+                        <div class="ratings-container">
+                        <div class="ratings">
+                        <div class="ratings-val" style="width: 0%;"></div><!-- End .ratings-val -->
+                        </div><!-- End .ratings -->
+                        <span class="ratings-text">( 0 Reviews )</span>
+                        </div><!-- End .rating-container -->
+                        </div><!-- End .product-body -->
+                        </div><!-- End .product -->
+                        </div><!-- End .col-6 col-md-4 col-lg-4 col-xl-3 -->
+                        <% if ((index + 1) % 4 === 0) { %>
+                        </div><div class="row">
+                        <% } %>
+                        <% }); %>
+                </div><!-- End .row -->
+                
+                
+                
+                
+                
+                
+                  
+                
+                
+                
+                
+                
+                
+
+
+
+             
+
+
+
+                
+                
+                                        
+                    
+
+                <div class="more-container text-center mt-2">
+                    <a href="#" class="btn btn-outline-dark-2 btn-more"><span>show more</span></a>
+                    <div class="pagination-area mt-30 mb-50">
+                        <nav aria-label="Page navigation example">
+                            <ul class="pagination justify-content-center">
+                                <% if (currentpage > 1) { %>
+                                  <li class="page-item"><a class="page-link" href="/?page=<%= currentpage - 1 %>">← Previous</a></li>
+                                <% } %>
+                                
+                                <% for (let i = 1; i <= totalpages; i++) { %>
+                                  <% if (i === currentpage) { %>
+                                    <li class="page-item active"><span class="page-link"><%= i %></span></li>
+                                  <% } else if (i === currentpage - 1 || i === currentpage + 1) { %>
+                                    <li class="page-item"><a class="page-link" href="/?page=<%= i %>"><%= i %></a></li>
+                                  <% } else if (i === 1 || i === totalpages || (i >= currentpage - 2 && i <= currentpage + 2)) { %>
+                                    <% /* Display the first, last, and pages close to the current page */ %>
+                                    <li class="page-item d-none d-md-block"><span class="page-link">...</span></li>
+                                    <li class="page-item"><a class="page-link" href="/?page=<%= i %>"><%= i %></a></li>
+                                    <li class="page-item d-none d-md-block"><span class="page-link">...</span></li>
+                                  <% } %>
+                                <% } %>
+                                
+                                <% if (currentpage < totalpages) { %>
+                                  <li class="page-item"><a class="page-link" href="/?page=<%= currentpage + 1 %>">Next →</a></li>
+                                <% } %>
+                              </ul>
+                              
+                        </nav>
+                    </div>
+                </div><!-- End .more-container -->
+            </div><!-- End .container -->
+
+            <div class="pb-3">
+                
+
+                <div class="mb-5 mb-lg-7"></div><!-- End .mb-5 -->
+
+                
+            </div><!-- End .bg-gray -->
+
+            <div class="mb-2"></div><!-- End .mb-5 -->
+            
+            <div class="container">
+            </div><!-- End .container -->
+            
+            
+        </main><!-- End .main -->
+
+        
+    </div><!-- End .modal -->
+
+    
+    <!-- Plugins JS File -->
+
+    <%-include('../partials/userfooter')-%>
+</body>
+
+
+<!-- molla/index-6.html  22 Nov 2019 09:56:39 GMT -->
+</html>
+
+
+
+<script>
+    function addTocart(proId){
+        $.ajax({
+            url:"/addto-cart/"+proId,
+            method:'get',
+            success:(response)=>{
+                if(response.status=='non existing'){
+                    let count=$('#cart-count').html()
+                    count=parseInt(count)+1
+                    $("#cart-count").html(count) 
+                }
+                alert(response.status)
+            }
+        })
+    }
+</script>

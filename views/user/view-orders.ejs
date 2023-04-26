@@ -1,0 +1,79 @@
+<%-include('../partials/userheader')-%>
+
+
+<div style="margin-left: 50px;">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Order ID</th>
+        <th>Date</th>
+        <th>Status</th>
+        <th>Total Amount</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% orders.forEach(function(orders,index) { %>
+      <tr>
+        <td><%=orders._id%></td>
+        <td><%=orders.orderDate%></td>
+        <td><%=orders.status%></td>
+        <td class="text-center"><%=orders.total%></td>
+        <td>
+
+          <% if (orders.status === "cancelled") { %>
+            
+          <% } else if (orders.status === "delivered") { %>
+            <a href="/view-orderdetails/<%=orders._id%>"><button class="btn btn-sm btn-info">Order Details</button></a>
+            <button class="btn btn-sm btn-primary" onclick="returnOrder('<%=orders._id%>')">Return</button>
+          <% } else if (orders.status === "returned") { %>
+            <a href="/view-orderdetails/<%=orders._id%>"><button class="btn btn-sm btn-info">Order Details</button></a>
+          <% } else { %>
+            <a href="/view-orderdetails/<%=orders._id%>"><button class="btn btn-sm btn-info">Order Details</button></a>
+            <button class="btn btn-sm btn-danger" onclick="cancelOrder('<%=orders._id%>')">Cancel Order</button>
+          <% } %>
+          
+
+
+        </td>
+      </tr>
+      <% })%>
+    </tbody>
+  </table>
+</div>
+
+
+<script>
+  function cancelOrder( orderid) {
+      $.ajax({
+        url: '/cancel-order',
+        data: {
+          orderId: orderid,
+        },
+        method: 'post',
+        success: (response) => {
+            alert("order cancelled")
+            location.reload()
+        }
+      });
+    }
+
+
+    function returnOrder( orderid) {
+      $.ajax({
+        url: '/return-order',
+        data: {
+          orderId: orderid,
+        },
+        method: 'post',
+        success: (response) => {
+            alert("order returned")
+            location.reload()
+        }
+      });
+    }
+</script>
+
+
+  <%-include('../partials/userfooter')-%>
+  

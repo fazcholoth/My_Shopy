@@ -1,0 +1,190 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-products-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:00 GMT -->
+
+
+<body>
+
+  <%-include('../partials/adminheader')-%>
+    <div class="screen-overlay"></div>
+    
+    <main class="main-wrap">
+        
+        <section class="content-main">
+            <div class="content-header">
+                <div>
+                    <h2 class="content-title card-title">Products List</h2>
+                    
+                </div>
+                <div>
+                  
+                    <a href="/admin/add-product" class="btn btn-primary btn-sm rounded">Add New Product</a>
+                </div>
+            </div>
+            <div class="card mb-4">
+                <header class="card-header">
+                    
+                </header> <!-- card-header end// -->
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table id="productTable" class="table align-middle table-nowrap mb-0">
+                      <thead class="table-light">
+                        <tr>
+                          <th scope="col" class="text-center">
+                            <div class="form-check align-middle">
+                              <input
+                                class="form-check-input"
+                                type="checkbox"
+                                id="transactionCheck01"
+                              />
+                              <label
+                                class="form-check-label"
+                                for="transactionCheck01"
+                              ></label>
+                            </div>
+                          </th>
+                          <th class="align-middle" scope="col">Product Name</th>
+                          <th class="align-middle" scope="col">Category</th>
+                          <th class="align-middle" scope="col">Price</th>
+                          <th class="align-middle" scope="col">Image</th>
+                          <th class="align-middle" scope="col">Action</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <% response.forEach(function(response,index) { %>
+                        <tr>
+                          <td class="text-center">
+                            <div class="form-check">
+                              <input
+                                class="form-check-input"
+                                type="checkbox"
+                                id="transactionCheck02"
+                              />
+                              <label
+                                class="form-check-label"
+                                for="transactionCheck02"
+                              ></label>
+                            </div>
+                          </td>
+                          <td><%=response.Productname%></td>
+                          <td><%=response.Category%></td>
+                          <td><%=response.Price%></td>
+                          <td>
+                            <img src="<%= response.Image[0] %>" class="img-sm img-thumbnail" alt="Item">
+                          </td>
+                          <td>
+                            <%if(response.isDeleted){%>
+                            <a href="/admin/publish-product/<%=response._id%>" class="btn btn-xs font-sm rounded btn-brand">
+                              <i class="material-icons md-edit"></i> Publish
+                            </a>
+                            <%}else{%>
+                            <a href="/admin/edit-product/<%=response._id%>" class="btn btn-xs font-sm rounded btn-brand">
+                              <i class="material-icons md-edit"></i> Edit
+                            </a>
+                            <a href="/admin/delete-product/<%=response._id%>" class="btn btn-xs font-sm btn-light rounded">
+                              <i class="material-icons md-delete_forever"></i> Delete
+                            </a>
+                            <% } %>
+                          </td>
+                        </tr>
+                        <% }) %>
+                      </tbody>
+                    </table>
+                  </div>
+                  <!-- table-responsive end// -->
+                </div>
+                 <!-- card-body end// -->
+            </div> <!-- card end// -->
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+</body>
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-products-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:12 GMT -->
+</html>
+
+<link
+  rel="stylesheet"
+  href="https://cdn.datatables.net/1.13.2/css/dataTables.bootstrap4.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdn.datatables.net/buttons/2.3.6/css/buttons.dataTables.min.css"
+/>
+<script
+  type="text/javascript"
+  charset="utf8"
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"
+></script>
+
+<script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
+
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/dataTables.buttons.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.html5.min.js"></script>
+<script src="https://cdn.datatables.net/buttons/2.3.6/js/buttons.print.min.js"></script>
+
+
+<!-- data table cdn -->
+
+<script src="/assets/js/vendors/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.2/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.2/js/dataTables.bootstrap4.min.js"></script>
+<!-- data table cdn -->
+
+
+
+<!-- DataTables CSS -->
+
+
+<!-- jQuery -->
+
+
+<!-- DataTables JavaScript -->
+<script type="text/javascript" src="https://cdn.datatables.net/v/dt/jszip-2.5.0/dt-1.10.24/b-1.7.0/b-html5-1.7.0/datatables.min.js"></script>
+
+<!-- DataTables Buttons JavaScript -->
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
+
+
+<script>
+  $(document).ready(function () {
+    $("#productTable").DataTable({
+      dom: "Bfrtip",
+      buttons: ["excel", "pdf"],
+    });
+  });
+</script>
+
+<script>
+  $(document).ready(function () {
+    $("#productTable").DataTable();
+  });
+</script>

@@ -1,0 +1,151 @@
+<script>
+
+    var nameError = document.getElementById('name-error');
+    var emailError = document.getElementById('email-error');
+    var passwordError = document.getElementById('password-error');
+    // var passwordError = document.getElementById('phone-error');
+    var submitError = document.getElementById('submit-error');
+
+    function validateName() {
+        var name = document.getElementById('name').value;
+        if (name.length == 0) {
+            nameError.innerHTML = 'Name is required';
+            return false;
+        }
+        if (!name.match(/^[A-Za-z]/)) {
+            nameError.innerHTML = 'Invalid name';
+            return false;
+        }
+        nameError.innerHTML = '';
+        return true;
+    }
+
+    function validateEmail() {
+        var email = document.getElementById('email').value;
+        if (email.length == 0) {
+            emailError.innerHTML = 'Email is required';
+            return false;
+        }
+        if (!email.match(/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/)) {
+            emailError.innerHTML = 'Email invalid';
+            return false;
+        }
+        emailError.innerHTML = '';
+        return true;
+    }
+
+    function validatePassword() {
+        var password = document.getElementById('password').value;
+        var passChecker = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
+        if (password.match(passChecker)) {
+            passwordError.innerHTML = '';
+            return true;
+        } else {
+            passwordError.innerHTML = 'invlid password';
+            return false;
+        }
+    }
+
+    // function validatePhoneNumber() {
+    //     var phone = document.getElementById('phone').value;
+    //     var submitError = document.getElementById('submit-error');
+
+    //     var re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
+
+    //     return re.test(phone);
+    // }
+
+    function validateForm() {
+        if (!validateName() || !validateEmail() || !validatePassword()) {
+            submitError.style.display = 'flex';
+            submitError.style.justifyContent = 'center';
+            submitError.innerHTML = 'All fields are required';
+            setTimeout(() => {
+                submitError.style.display = 'none';
+            }, 3000);
+            return false;
+        }
+    }
+
+
+</script>
+
+
+
+<form action="/signup" method="POST" class="register-form" id="register-form">
+    <div class="form-group">
+        <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+        <input  type="text" name="name" id="name" placeholder="Your Name" onkeyup="validateName()" />
+    </div>
+    <span id="name-error" class="validation" style="color: red;"></span>
+
+    <div class="form-group">
+        <label for="email"><i class="zmdi zmdi-email"></i></label>
+        <input type="email" name="email" id="email" placeholder="Your Email" onkeyup="validateEmail()" />
+    </div>
+    <span id="email-error" class="validation" style="color: red;"></span>
+
+    <div class="form-group">
+        <label for="pass"><i class="zmdi zmdi-lock"></i></label>
+        <input type="password" name="password" id="password" placeholder="Password" onkeyup="validatePassword()" />
+    </div>
+    <span id="password-error" class="validation" style="color: red;"></span>
+
+    <!-- <div class="form-group">
+        <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
+        <input type="password" name="re_password" id="re_pass" placeholder="Repeat your password"/>
+    </div> -->
+
+
+    <div class="form-group">
+        <label for="name"><i class="zmdi zmdi-phone"></i></label>
+        <input type="number" name="phone" id="phone" placeholder="Phone number"  />
+        <span id="phone-error" class="validation" style="color: red;"></span>
+    </div>
+
+
+    
+    <div class="form-group">
+        <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
+        <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>
+    </div>
+    <span id="submit-error" class="validation" style="color: red;"></span>
+
+    <div class="form-group form-button">
+        <input type="submit"  id="signup" class="form-submit" value="Register" onclick=" return validateForm()" />
+    </div>
+</form>
+
+
+
+
+<!--    <li><a href="category.html">Cart <span class="badge badge-light"><%=cartcount%></span></a></li> -->
+
+
+<script>
+    function addTocart(proId){
+        $.ajax({
+            url:"/addto-cart/"+proId,
+            method:'get',
+            success:(Response)=>{
+                alert(response)
+            }
+        })
+    }
+</script>
+
+
+<div class="cart-product-quantity">
+    <input type="number" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
+</div><!-- End .cart-product-quantity -->
+
+
+
+
+
+const emailError = document.getElementById('email-error');
+
+
+if(categoryData.categorydiscount!==0){
+    await db.product.updateMany({Category:categoryData.categoryname},{$inc:{Price:-categoryData.categorydiscount},$set:{Firstprice:'$Price'}})
+  }

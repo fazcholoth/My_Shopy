@@ -1,0 +1,56 @@
+<%-include('../partials/userheader')-%>
+<div class="container">
+  <div class="row my-5">
+    <div class="col-lg-10 m-auto">
+      <div class="row d-flex justify-content-center">
+        <div class="col-lg-8">
+          <div class="login_wrap widget-taber-content p-30 background-white border-radius-5">
+            <div class="padding_eight_all bg-white" style="min-height: 400px;">
+              <div class="heading_s1">
+                <h3 class="mb-30">Enter Phone Number</h3>
+              </div>
+
+              <form action="" method="">
+                <div class="form-group">
+                  <input type="text" required="" id="phone-number" name="phonenumber" placeholder="Phone Number" class="form-control">
+                </div>
+                <span id="error-message" class="text-danger"></span>
+              
+                <div class="form-group text-center">
+                  <button type="submit" class="btn btn-primary btn-block" onclick="verifyNumber()">Submit</button>
+                </div>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <%-include('../partials/userfooter')-%>
+  
+
+    <script>
+      function verifyNumber() {
+        event.preventDefault()
+        var phoneNumber = $('#phone-number').val();
+        $.ajax({
+          url: "/otp-login",
+          method: 'post',
+          data: { phone: phoneNumber },
+          success: function(response) {
+            if (response.status) {
+              $("#my-form").submit();
+              location.href = '/verify-otp';
+            } else {
+              $("#error-message").html('Mobile number does not exist');
+            }
+            alert(response);
+          }
+        });
+      }
+    </script>
+    

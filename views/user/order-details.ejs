@@ -1,0 +1,69 @@
+<%-include('../partials/userheader')-%>
+<div class="main-wrap">
+  <a href="/create-invoice/<%=orderId%>"><button>Create Invoice</button></a>
+  <div class="products">
+    <div class="row">
+      <% product.forEach(function(product) { %>
+        <div class="col-6 col-md-4 col-lg-4 col-xl-3">
+          <div class="product product-7 text-center">
+            <figure class="product-media">
+              <a href="/product-detail/<%= product._id %>">
+                <img src="<%= product.image[0] %>" alt="Product image" class="product-image">
+              </a>
+  
+             <!-- End .product-action-vertical -->
+  
+             
+            </figure><!-- End .product-media -->
+  
+            <div class="product-body" style="background-color: rgb(250, 212, 228);">
+              <div class="product-cat">
+                <a href="#"><%= product.category %></a>
+              </div><!-- End .product-cat -->
+              <h3 class="product-title"><a href="/product-detail/<%= product._id %>"><%= product.name %></a></h3><!-- End .product-title -->
+              <div class="product-price">
+                <%= product.price %>
+              </div><!-- End .product-price -->
+              <div class="ratings-container">
+                <div class="ratings">
+                  <div class="ratings-val" style="width: 0%;"></div><!-- End .ratings-val -->
+                </div><!-- End .ratings -->
+                <span class="ratings-text">( 0 Reviews )</span>
+              </div><!-- End .rating-container -->
+  
+              <!-- End .product-nav -->
+            </div><!-- End .product-body -->
+          </div><!-- End .product -->
+        </div><!-- End .col-6 col-md-4 col-lg-4 col-xl-3 -->
+      <% }); %>
+    </div><!-- End .row -->
+  
+    <div class="load-more-container text-center">
+      <a href="#" class="btn btn-outline-darker btn-load-more">More Products <i class="icon-refresh"></i></a>
+    </div><!-- End .load-more-container -->
+  </div>
+  
+</div>
+
+<%-include('../partials/userfooter')-%>
+  
+<script>
+  function createInvoice(orderId) {
+  $.ajax({
+    url: '/create-invoice',
+    data: {
+      orderId
+    },
+    method: 'post',
+    success:(response)=>{
+      if(response.status){
+        location.href='/order-Success'
+      }else{
+        alert('payment Failed')
+      }
+    }
+  });
+}
+</script>
+
+

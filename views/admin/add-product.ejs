@@ -1,0 +1,248 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:32 GMT -->
+<head>
+    <meta charset="utf-8">
+    <title>Evara Dashboard</title>
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="">
+    <meta property="og:type" content="">
+    <meta property="og:url" content="">
+    <meta property="og:image" content="">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" href=".../../adminassets/imgs/theme/favicon.svg">
+    <!-- Template CSS -->
+    <link href=".../../adminassets/css/main.css" rel="stylesheet" type="text/css" />
+    
+</head>
+
+<body>
+  
+  <%-include('../partials/adminheader')-%>
+    
+    <main class="main-wrap" style="width:100%;">
+        <section class="content-main">
+            <div class="row">
+                <div class="col-6">
+                    <div class="content-header">
+                        <h2 class="content-title">Add New Product</h2>
+                        <div>
+                            
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6>1. General info</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <form action="/admin/add-product"
+                                         method="POST"  enctype="multipart/form-data" id="addproduct" >
+                                        <label class="form-label">Product title</label>
+                                        <input type="text" placeholder="Type here" name="name" class="form-control" >
+                                        <span id="nameError" class="validation" style="color: red;"></span>
+                                    </div>
+                                    <div class="mb-4">
+                                        <label class="form-label">Description</label>
+                                        <textarea type="text" placeholder="Type here" name="description" class="form-control" rows="4"></textarea>
+                                        <span id="descriptionError" class="validation" style="color: red;"></span>
+                                    </div>
+                                    
+                                </div> <!-- col.// -->
+                            </div> <!-- row.// -->
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6>1. Color</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <label class="form-label">Product Color</label>
+                                        <input type="text" placeholder="Color" name="color" class="form-control">
+                                        <span id="quantityError" class="validation" style="color: red;"></span>
+                                    </div>
+                                </div> <!-- col.// -->
+                            </div> <!-- row.// -->
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6>2. Brand</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <label class="form-label">Brand Name</label>
+                                        <input type="text" placeholder="Brand" name="brand" class="form-control">
+                                        <span id="quantityError" class="validation" style="color: red;"></span>
+                                    </div>
+                                </div> <!-- col.// -->
+                            </div> <!-- row.// -->
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6>3. Quantity</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <label class="form-label">available quantity</label>
+                                        <input type="text" placeholder="quantity" name="quantity" class="form-control">
+                                        <span id="quantityError" class="validation" style="color: red;"></span>
+                                    </div>
+                                </div> <!-- col.// -->
+                            </div> <!-- row.// -->
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6>4. Pricing</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <label class="form-label">Cost in Rupees</label>
+                                        <input type="text" placeholder="00.0" name="price" class="form-control">
+                                        <label class="form-label">Discount Amount</label>
+                                        <input type="text" placeholder="00.0" name="discountprice" class="form-control" value="0">
+                                        <span id="priceError" class="validation" style="color: red;"></span>
+                                    </div>
+                                </div> <!-- col.// -->
+                            </div>
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6>5. Category</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <% cat.forEach(function(cat) { %>
+                                        <label class="mb-2 form-check form-check-inline" style="width: 45%;">
+                                            <input class="form-check-input" checked="" name="category" value="<%= cat.Categoryname%>" type="radio">
+                                            <span class="form-check-label"><%= cat.Categoryname%></span>
+                                            <span id="priceError" class="validation" style="color: red;"></span>
+                                        </label>
+                                        <% }) %>
+                                    </div>
+                                </div> <!-- col.// -->
+                            </div> <!-- row.// -->
+                            <hr class="mb-4 mt-0">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h6>6. Media</h6>
+                                </div>
+                                <div class="col-md-9">
+                                    <div class="mb-4">
+                                        <label class="form-label">Images</label>
+                                        <input class="form-control" type="file" name="Image" multiple>
+                                        <span id="imageError" class="validation" style="color: red;"></span>
+                                    </div>
+                                    
+                                </div> <!-- col.// -->
+                            </div> <!-- .row end// -->
+                            <button type="submit" class="btn btn-success mt-4">Submit</button>
+                        </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section> <!-- content-main end// -->
+        <footer class="main-footer font-xs">
+            <div class="row pb-30 pt-15">
+                <div class="col-sm-6">
+                    <script>
+                    document.write(new Date().getFullYear())
+                    </script> ©, Evara - HTML Ecommerce Template .
+                </div>
+                <div class="col-sm-6">
+                    <div class="text-sm-end">
+                        All rights reserved
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+    
+    <!-- Main Script -->
+    
+    
+
+
+<!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:32 GMT -->
+</html>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.min.js" integrity="sha384-heAjqF+bCxXpCWLa6Zhcp4fu20XoNIA98ecBC1YkdXhszjoejr5y9Q77hIrv8R9i" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+
+
+<script>
+    // Get form fields
+    const form = document.getElementById('addproduct');
+    const nameField = form.elements.name;
+    const descriptionField = form.elements.description;
+    const priceField = form.elements.price;
+    const imageField = form.elements.Image;
+
+    // Add event listener to the form on submit
+    form.addEventListener('submit', (event) => {
+        // Prevent form submission
+        event.preventDefault();
+
+        // Validate name field
+        if (!nameField.value.match(/^[a-zA-Z ]+$/)) {
+            nameField.classList.add('is-invalid');
+            document.getElementById('nameError').textContent = 'Please enter a valid name';
+        } else {
+            nameField.classList.remove('is-invalid');
+            document.getElementById('nameError').textContent = '';
+        }
+
+        // Validate description field
+        if (descriptionField.value.length < 20) {
+            descriptionField.classList.add('is-invalid');
+            document.getElementById('descriptionError').textContent = 'Please enter a description of at least 20 characters';
+        } else {
+            descriptionField.classList.remove('is-invalid');
+            document.getElementById('descriptionError').textContent = '';
+        }
+
+        // Validate price field
+        if (isNaN(priceField.value) || priceField.value <= 25) {
+            priceField.classList.add('is-invalid');
+            document.getElementById('priceError').textContent = 'Please enter a positive number above 25';
+        } else {
+            priceField.classList.remove('is-invalid');
+            document.getElementById('priceError').textContent = '';
+        }
+
+        // Validate image field
+        if (imageField.value === '') {
+            imageField.classList.add('is-invalid');
+            document.getElementById('imageError').textContent = 'Please upload at least one image';
+        } else {
+            imageField.classList.remove('is-invalid');
+            document.getElementById('imageError').textContent = '';
+        }
+
+        // If all fields are valid, submit the form
+        if (!nameField.classList.contains('is-invalid') && !descriptionField.classList.contains('is-invalid') && !priceField.classList.contains('is-invalid') && !imageField.classList.contains('is-invalid')) {
+            form.submit();
+        }
+    });
+</script>
+
+
+
+
+
+
+

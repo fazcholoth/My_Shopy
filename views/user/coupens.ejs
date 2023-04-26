@@ -1,0 +1,35 @@
+<%-include('../partials/userheader')-%>
+
+<div class="main-wrap">
+    <div class="col-md-9">
+        <div class="container">
+          <div class="row">
+            <% coupen.forEach(function(coupen,index) { %>
+            <div class="col-lg-3 col-md-6 mb-3">
+              <div class="card coupon-card">
+                <div class="card-header coupon-header bg-dark">
+                  <h6 class="mb-0" style="color: aquamarine;"><%=coupen.coupentitle%></h6>
+                </div>
+                <div
+                  class="card-body"
+                  style="background-color: rgb(177, 190, 190)"
+                >
+                <p class="card-text coupon-description">
+                    Code: <%=coupen.coupencode%> 
+                  </p>
+                  <p class="card-text coupon-description">
+                    Flat <%=coupen.discount%> Rupees Discount
+                  </p>
+                  <small class="coupon-validity"
+                    >Expiry Date:<%=coupen.expirydate%></small
+                  >
+                </div>
+              </div>
+            </div>
+            <% })%>
+          </div>
+        </div>
+      </div>
+</div>
+
+<%-include('../partials/userfooter')-%>

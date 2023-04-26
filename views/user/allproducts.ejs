@@ -1,0 +1,390 @@
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Eshope</title>
+    <meta name="keywords" content="HTML5 Template">
+    <meta name="description" content="Eshope">
+    <meta name="author" content="p-themes">
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../../assets/images/icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="../../assets/images/icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/icons/favicon-16x16.png">
+    <link rel="manifest" href="../../assets/images/icons/site.html">
+    <link rel="mask-icon" href="../../assets/images/icons/safari-pinned-tab.svg" color="#666666">
+    <link rel="shortcut icon" href="../../assets/images/icons/favicon.ico">
+    <meta name="apple-mobile-web-app-title" content="Molla">
+    <meta name="application-name" content="Molla">
+    <meta name="msapplication-TileColor" content="#cc9966">
+    <meta name="msapplication-config" content="../../assets/images/icons/browserconfig.xml">
+    <meta name="theme-color" content="#ffffff">
+    <!-- Plugins CSS File -->
+    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css">
+    <!-- Main CSS File -->
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../../assets/css/plugins/owl-carousel/owl.carousel.css">
+    <link rel="stylesheet" href="../../assets/css/plugins/magnific-popup/magnific-popup.css">
+    <link rel="stylesheet" href="../../assets/css/plugins/nouislider/nouislider.css">
+</head>
+
+
+<%-include('../partials/userheader')-%>
+
+<main class="main" style="background-color: rgb(236, 239, 239);">
+    <div class="page-header text-center" style="background-image: url('assets/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title"><%=products.Category%></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                <li class="breadcrumb-item"><a href="#">No Sidebar</a></li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+    <h1 class="page-title"><%=products.Category%></h1>
+    <div class="page-content">
+        <div class="container">
+            <div class="toolbox">
+                <div class="toolbox-left">
+                    <a href="#" class="sidebar-toggler"><i class="icon-bars"></i>Filters</a>
+                </div><!-- End .toolbox-left -->
+
+                <div class="toolbox-center">
+                    <div class="toolbox-info">
+                        Showing <span>12 of 56</span> Products
+                    </div><!-- End .toolbox-info -->
+                </div><!-- End .toolbox-center -->
+
+                <div class="toolbox-right">
+                    <div class="toolbox-sort">
+                        <label for="sortby">Sort by:</label>
+                        <div class="select-custom">
+                            <select name="sortby" id="sortby" class="form-control">
+                                <option value="">Select Order</option>
+                                <option value="desc">High To Low</option>
+                                <option value="acent">Low To High</option>
+                            </select>
+                        </div>
+                    </div><!-- End .toolbox-sort -->
+                </div><!-- End .toolbox-right -->
+            </div><!-- End .toolbox -->
+
+            <div class="products">
+                <div class="row">
+                    <% products.forEach(function(product) { %>
+                        <div class="col-6 col-md-4 col-lg-4 col-xl-3">
+                            <div class="product product-7 text-center">
+                                <figure class="product-media">
+                                    <a href="/product-detail/<%= product._id %>">
+                                        <img src="<%= product.Image[0] %>" alt="Product image" class="product-image">
+                                    </a>
+                    
+                                    <div class="product-action-vertical">
+                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                                        <a href="#" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+                                        <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                                    </div><!-- End .product-action-vertical -->
+                    
+                                    <div class="product-action">
+                                        <button class="btn-product btn-cart" onclick="addTocart('<%= product._id %>')"><span>add to cart</span></button>
+                                    </div><!-- End .product-action -->
+                                </figure><!-- End .product-media -->
+                    
+                                <div class="product-body" style="background-color: rgb(250, 212, 228);">
+                                    <div class="product-cat">
+                                        <a href="#"><%= product.Category %></a>
+                                    </div><!-- End .product-cat -->
+                                    <h3 class="product-title"><a href="/product-detail/<%= product._id %>"><%= product.Productname %></a></h3><!-- End .product-title -->
+                                    <% if (product.Firstprice==0) { %>
+                                        
+                                        <div class="product-price">
+                                            <p>
+                                                <%= product.Price %>
+                                            </p>
+                                              
+   
+                                        </div>
+                                        <% } else { %>   
+                                        <div class="product-price">
+                                            <p>
+                                                <span style="text-decoration: line-through;"><%= product.Firstprice %></span> Discount Rate <%= product.Price %>
+                                            </p>
+                                              
+   
+                                        </div>
+                                        
+                                        
+                                        <% } %> <!-- End .product-price -->
+                                    <div class="ratings-container">
+                                        <div class="ratings">
+                                            <div class="ratings-val" style="width: 0%;"></div><!-- End .ratings-val -->
+                                        </div><!-- End .ratings -->
+                                        <span class="ratings-text">( 0 Reviews )</span>
+                                    </div><!-- End .rating-container -->
+                    
+                                    <!-- End .product-nav -->
+                                </div><!-- End .product-body -->
+                            </div><!-- End .product -->
+                        </div><!-- End .col-6 col-md-4 col-lg-4 col-xl-3 -->
+                    <% }); %>
+                    
+                </div><!-- End .row -->
+
+                <div class="load-more-container text-center">
+                    <a href="#" class="btn btn-outline-darker btn-load-more">More Products <i class="icon-refresh"></i></a>
+                </div><!-- End .load-more-container -->
+            </div><!-- End .products -->
+
+            <div class="sidebar-filter-overlay"></div><!-- End .sidebar-filter-overlay -->
+            <aside class="sidebar-shop sidebar-filter">
+                <div class="sidebar-filter-wrapper">
+                    <div class="widget widget-clean">
+                        <label><i class="icon-close"></i>Filters</label>
+                        <a href="#" class="sidebar-filter-clear">Clean All</a>
+                    </div><!-- End .widget -->
+                    <div class="widget widget-collapsible">
+                        <form action="" method="">
+                            <h3 class="widget-title">
+                                <a data-toggle="collapse" href="#widget-1" role="button" aria-expanded="true" aria-controls="widget-1">
+                                    Category
+                                </a>
+                            </h3><!-- End .widget-title -->
+                    
+                            <div class="collapse show" id="widget-1">
+                                <div class="widget-body">
+                                    <div class="filter-items filter-items-count">
+                                        <div class="filter-item">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="cat-1" name="category" value="men">
+                                                <label class="custom-control-label" for="cat-1">men</label>
+                                            </div><!-- End .custom-radio -->
+                                           
+                                        </div><!-- End .filter-item -->
+                    
+                                        <div class="filter-item">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="cat-2" name="category" value="women">
+                                                <label class="custom-control-label" for="cat-2">women</label>
+                                            </div><!-- End .custom-radio -->
+                                            
+                                        </div><!-- End .filter-item -->
+                    
+                                        <div class="filter-item">
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="cat-3" name="category" value="children">
+                                                <label class="custom-control-label" for="cat-3">children</label>
+                                            </div><!-- End .custom-radio -->
+                                            
+                                        </div><!-- End .filter-item -->
+                    
+                                    </div><!-- End .filter-items -->
+                                </div><!-- End .widget-body -->
+                            </div><!-- End .collapse -->
+                        
+                    </div><!-- End .widget -->
+                    <!-- End .widget -->
+                    <!-- End .widget -->
+
+                    
+
+                    <div class="widget widget-collapsible">
+                        <h3 class="widget-title">
+                          <a data-toggle="collapse" href="#widget-3" role="button" aria-expanded="true" aria-controls="widget-3">
+                            Colour
+                          </a>
+                        </h3>
+                        <div class="collapse show" id="widget-3">
+                          <div class="widget-body">
+                            <div class="filter-colors">
+                              <select name="color" id="color">
+                                <option value="" data-color="brown">Select a Color</option>
+                                <option value="#f0c04a" data-color="yellow">Yellow</option>
+                                <option value="#333333" data-color="black">Black</option>
+                                <option value="#cc3333" data-color="red">Red</option>
+                                <option value="#3399cc" data-color="blue">Blue</option>
+                                <option value="#669933" data-color="green">Green</option>
+                                <option value="#f2719c" data-color="pink">Pink</option>
+                                <option value="#ebebeb" data-color="gray">Gray</option>
+                              </select>
+                              <div class="color-preview"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      
+
+                    <div class="widget widget-collapsible">
+                        <h3 class="widget-title">
+                            <a data-toggle="collapse" href="#widget-4" role="button" aria-expanded="true" aria-controls="widget-4">
+                                Brand
+                            </a>
+                        </h3><!-- End .widget-title -->
+
+                        <div class="collapse show" id="widget-4">
+                            <div class="widget-body">
+                                <div class="filter-items">
+                                    <div class="filter-item">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="brand-1" name="brand" class="custom-control-input">
+                                            <label class="custom-control-label" for="brand-1">Next</label>
+                                        </div><!-- End .custom-radio -->
+                                    </div><!-- End .filter-item -->
+                                    
+                                    <div class="filter-item">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="brand-2" name="brand" class="custom-control-input">
+                                            <label class="custom-control-label" for="brand-2">River Island</label>
+                                        </div><!-- End .custom-radio -->
+                                    </div><!-- End .filter-item -->
+                                    
+                                    <div class="filter-item">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="brand-3" name="brand" class="custom-control-input">
+                                            <label class="custom-control-label" for="brand-3">Geox</label>
+                                        </div><!-- End .custom-radio -->
+                                    </div><!-- End .filter-item -->
+                                    
+                                    <div class="filter-item">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="brand-4" name="brand" class="custom-control-input">
+                                            <label class="custom-control-label" for="brand-4">New Balance</label>
+                                        </div><!-- End .custom-radio -->
+                                    </div><!-- End .filter-item -->
+                                    
+                                    <div class="filter-item">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="brand-5" name="brand" class="custom-control-input">
+                                            <label class="custom-control-label" for="brand-5">UGG</label>
+                                        </div><!-- End .custom-radio -->
+                                    </div><!-- End .filter-item -->
+                                    
+                                    <div class="filter-item">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="brand-6" name="brand" class="custom-control-input">
+                                            <label class="custom-control-label" for="brand-6">F&F</label>
+                                        </div><!-- End .custom-radio -->
+                                    </div><!-- End .filter-item -->
+                                    
+                                    <div class="filter-item">
+                                        <div class="custom-control custom-radio">
+                                            <input type="radio" id="brand-7" name="brand" class="custom-control-input">
+                                            <label class="custom-control-label" for="brand-7">Nike</label>
+                                        </div><!-- End .custom-radio -->
+                                    </div><!-- End .filter-item -->
+                                    
+
+                                </div><!-- End .filter-items -->
+                                <button type="submit" class="btn btn-success">Apply</button>
+                            </div><!-- End .widget-body -->
+                            </form>
+                        </div><!-- End .collapse -->
+                    </div><!-- End .widget -->
+
+                    
+                </div><!-- End .sidebar-filter-wrapper -->
+            </aside><!-- End .sidebar-filter -->
+        </div><!-- End .container -->
+    </div><!-- End .page-content -->
+</main><!-- End .main -->
+<%-include('../partials/userfooter')-%>
+
+<script src="../../assets/js/jquery.min.js"></script>
+    <script src="../../assets/js/bootstrap.bundle.min.js"></script>
+    <script src="../../assets/js/jquery.hoverIntent.min.js"></script>
+    <script src="../../assets/js/jquery.waypoints.min.js"></script>
+    <script src="../../assets/js/superfish.min.js"></script>
+    <script src="../../assets/js/owl.carousel.min.js"></script>
+    <script src="../../assets/js/bootstrap-input-spinner.js"></script>
+    <script src="../../assets/js/jquery.elevateZoom.min.js"></script>
+    <script src="../../assets/js/bootstrap-input-spinner.js"></script>
+    <script src="../../assets/js/jquery.magnific-popup.min.js"></script>
+    <!-- Main JS File -->
+
+    <script src="../../assets/main.js"></script>
+
+    <script>
+        function addTocart(proId){
+            $.ajax({
+                url:"/addto-cart/"+proId,
+                method:'get',
+                success:(response)=>{
+                    if(response.status=='non existing'){
+                        let count=$('#cart-count').html()
+                        count=parseInt(count)+1
+                        $("#cart-count").html(count) 
+                    }
+                    alert(response.status)
+                }
+            })
+        }
+
+
+
+
+
+    $("#filter-form").submit((e) => {
+    e.preventDefault();
+    const categoryRadios = document.getElementsByName('category');
+    let selectedCategory = null;
+    for (const categoryRadio of categoryRadios) {
+        if (categoryRadio.checked) {
+            selectedCategory = categoryRadio.value;
+            break;
+        }
+    }
+    const brandRadios = document.getElementsByName('brand');
+    let selectedBrand = null;
+    for (const brandRadio of brandRadios) {
+        if (brandRadio.checked) {
+            selectedBrand = brandRadio.value;
+            break;
+        }
+    }
+    var color = document.getElementById("color");
+    var selectedColor = color.value;
+    alert(selectedColor);
+
+    
+    $.ajax({
+      url: "/view-allproducts?color=selectedColor&category=selectedCategory&brand=selectedBrand&sort",
+      method: 'get',
+      data: $('#filter-form').serialize(),
+      success: (response) => {
+        location.reload()
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    });
+  }); 
+    </script>
+
+   
+
+
+  
+  <script>
+   $('#sortby').on('change', function() {
+  var order = document.getElementById("sortby");
+  var selectedOrder = order.value;
+  $.ajax({
+    url: "/view-allproducts?color&category&brand&sort=" + selectedOrder,
+    method: 'get',
+    contentType: 'application/json',
+    data: JSON.stringify({ selectedOrder }),
+    success: function(response) {
+      location.reload();
+      console.log('POST request successful:', response);
+    },
+    error: function(xhr, status, error) {
+      console.log('POST request failed:', error);
+    }
+  });
+});
+
+  </script>
+  
