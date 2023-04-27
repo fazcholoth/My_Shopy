@@ -193,9 +193,9 @@
                                     <li class="page-item"><a class="page-link" href="/?page=<%= i %>"><%= i %></a></li>
                                   <% } else if (i === 1 || i === totalpages || (i >= currentpage - 2 && i <= currentpage + 2)) { %>
                                     <% /* Display the first, last, and pages close to the current page */ %>
-                                    <li class="page-item d-none d-md-block"><span class="page-link">...</span></li>
+                                    
                                     <li class="page-item"><a class="page-link" href="/?page=<%= i %>"><%= i %></a></li>
-                                    <li class="page-item d-none d-md-block"><span class="page-link">...</span></li>
+                                    
                                   <% } %>
                                 <% } %>
                                 

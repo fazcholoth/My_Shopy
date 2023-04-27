@@ -55,7 +55,7 @@ module.exports = {
     });
   },
   getHome: (page) => {
-    const itemsperPage = 3;
+    const itemsperPage = 8;
     const currentpage = page || 1;
     console.log(page);
     const offset = (currentpage - 1) * itemsperPage;
@@ -241,22 +241,22 @@ module.exports = {
     );
     return item;
   },
-  categoryView: (category) => {
-    const itemsperPage = 1;
-    const currentpage = 1;
+  categoryView: (category,page) => {
+    const itemsperPage = 8;
+    const currentpage = page||1;
     const offset = (currentpage - 1) * itemsperPage;
     return new Promise(async (resolve, reject) => {
       const allproducts = await db.product
         .find({ Category: category, isDeleted: false })
         .countDocuments();
-      const totapages = Math.ceil(allproducts / itemsperPage);
+      const totalpages = Math.ceil(allproducts / itemsperPage);
       await db.product
         .find({ Category: category, isDeleted: false })
         .skip(offset)
         .limit(itemsperPage)
         .exec()
         .then((products) => {
-          resolve({ totapages, products, currentpage });
+          resolve({ totalpages, products, currentpage });
         });
     });
   },
@@ -536,9 +536,10 @@ module.exports = {
     await db.address.deleteOne({ _id: addressId });
     return;
   },
-  viewallProducts: async (filter, sort) => {
-    const itemsperPage = 1;
-    const currentpage = 1;
+  viewallProducts: async (filter, sort,page) => {
+    const itemsperPage = 2;
+    const currentpage = page||1;
+    console.log('page...'+page);
     const offset = (currentpage - 1) * itemsperPage;
 
     const query = {};
@@ -556,15 +557,14 @@ module.exports = {
         .find(query)
         .sort({ Price: -1 })
         .countDocuments();
-      const totapages = Math.ceil(allproducts / itemsperPage);
-      let productsQuery = await db.product
+      const totalpages = Math.ceil(allproducts / itemsperPage);
+      let products = await db.product
         .find(query)
         .sort({ Price: -1 })
         .skip(offset)
         .limit(itemsperPage);
-      console.log(sort);
-      console.log("1");
-      return { productsQuery, totapages, currentpage };
+      
+      return { products, totalpages, currentpage };
     } else if (sort && sort === "acent") {
       if (filter && filter.color) {
         query.Color = filter.color;
@@ -579,16 +579,15 @@ module.exports = {
         .find(query)
         .sort({ Price: 1 })
         .countDocuments();
-      const totapages = Math.ceil(allproducts / itemsperPage);
-      let productsQuery = await db.product
+      const totalpages = Math.ceil(allproducts / itemsperPage);
+      let products = await db.product
         .find(query)
         .sort({ Price: 1 })
         .skip(offset)
         .limit(itemsperPage);
 
-      console.log("2");
-      console.log(sort);
-      return { productsQuery, totapages, currentpage };
+      
+      return { products, totalpages, currentpage };
     } else {
       if (filter && filter.color) {
         query.Color = filter.color;
@@ -600,16 +599,15 @@ module.exports = {
         query.Brand = filter.brand;
       }
       const allproducts = await db.product.find(query).countDocuments();
-      const totapages = Math.ceil(allproducts / itemsperPage);
-      let productsQuery = await db.product
+      const totalpages = Math.ceil(allproducts / itemsperPage);
+      let products = await db.product
         .find(query)
         .sort({ Price: 1 })
         .skip(offset)
         .limit(itemsperPage);
 
-      console.log("3");
-      console.log(sort);
-      return { productsQuery, totapages, currentpage };
+      
+      return { products, totalpages, currentpage };
     }
   },
 };

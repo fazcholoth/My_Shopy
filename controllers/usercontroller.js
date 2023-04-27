@@ -161,7 +161,7 @@ module.exports = {
       cartcount = await userhelper.getCartcount(req.session.user._id);
     }
     const categories = await listedCategories();
-    userhelper.categoryView(req.params.category).then(({products,totalpages,currentpage}) => {
+    userhelper.categoryView(req.params.category,req.query.page).then(({products,totalpages,currentpage}) => {
       console.log(totalpages);
       res.render("user/category", { products,totalpages,currentpage,cartcount, user, categories });
     });
@@ -423,7 +423,7 @@ module.exports = {
     const { color, category, brand, sort } = req.query;
     if (color || category || brand) {
       req.session.filter = req.query;
-      userhelper.viewallProducts(req.session.filter, req.session.sort)
+      userhelper.viewallProducts(req.session.filter, req.session.sort,req.query.page)
 
         .then(({currentpage,totalpages,products}) => {
           res.render("user/allproducts", {
@@ -436,10 +436,10 @@ module.exports = {
           });
         });
     } else if(sort){
-      console.log(sort);
-      console.log('sort comes here')
+    
+      
       req.session.sort = req.query.sort;
-      userhelper.viewallProducts(req.session.filter, req.session.sort)
+      userhelper.viewallProducts(req.session.filter, req.session.sort,req.query.page)
 
         .then(({currentpage,totalpages,products}) => {
           res.render("user/allproducts", {
@@ -452,7 +452,7 @@ module.exports = {
           });
         });
     }else{
-      userhelper.viewallProducts(req.session.filter, req.session.sort)
+      userhelper.viewallProducts(req.session.filter, req.session.sort,req.query.page)
         .then(({currentpage,totalpages,products}) => {
           res.render("user/allproducts", {
             products,
