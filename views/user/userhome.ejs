@@ -238,7 +238,11 @@
 <!-- molla/index-6.html  22 Nov 2019 09:56:39 GMT -->
 </html>
 
-
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
 
 <script>
     function addTocart(proId){
@@ -251,7 +255,13 @@
                     count=parseInt(count)+1
                     $("#cart-count").html(count) 
                 }
-                alert(response.status)
+                if (response.status === "existing") {
+          new swal("Product already added to cart", "", "warning");
+        } else if (response.status === "non existing") {
+          new swal("Product added to cart", "", "success");
+        } else if (response.status === "out of stock") {
+          new swal("Out of stock", "", "error");
+        }
             }
         })
     }

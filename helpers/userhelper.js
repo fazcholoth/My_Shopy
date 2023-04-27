@@ -8,6 +8,7 @@ const twilio = require("../utils/twilio");
 const Razorpay = require("razorpay");
 const { resolve } = require("dns");
 const generateInvoice = require("../utils/pdf");
+const { error } = require("console");
 var currentdate = new Date();
 var date = currentdate.toLocaleDateString();
 
@@ -458,17 +459,23 @@ module.exports = {
         });
     });
   },
-  cancelOrder: async (orderId) => {
-    await db.order.updateOne(
-      { _id: orderId },
-      { $set: { status: "cancelled" } }
-    );
-    return;
+  cancelOrder: async (orderId,reason) => {
+    try{
+      console.log(orderId);
+      await db.order.updateOne(
+        { _id: orderId },
+        { $set: { status: "cancelled",cancelreason:reason } }
+      );
+      return;
+    }catch(err) {
+       console.log(error);
+    }
+    
   },
-  returnOrder: async (orderId) => {
+  returnOrder: async (orderId,reason) => {
     await db.order.updateOne(
       { _id: orderId },
-      { $set: { status: "returned", paymentstatus: "paid" } }
+      { $set: { status: "returned", paymentstatus: "paid",returnreason:reason } }
     );
     return;
   },

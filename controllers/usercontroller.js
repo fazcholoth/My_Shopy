@@ -308,12 +308,12 @@ module.exports = {
   },
   cancelOrder: async (req, res) => {
     const orderId = req.body.orderId;
-    await userhelper.cancelOrder(orderId);
+    await userhelper.cancelOrder(orderId,req.body.reason);
     res.json({ status: true });
   },
   returnOrder: async (req, res) => {
     const orderId = req.body.orderId;
-    await userhelper.returnOrder(orderId);
+    await userhelper.returnOrder(orderId,req.body.reason);
     res.json({ status: true });
   },
   applyCoupen: async (req, res) => {

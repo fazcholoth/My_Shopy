@@ -284,11 +284,11 @@
           $("#cart-count").html(count);
         }
         if (response.status === "existing") {
-          swal("Product already added to cart", "", "warning");
-        } else if (response.status === "non-existing") {
-          swal("Product added to cart", "", "success");
-        } else if (response.status === "limit-reached") {
-          swal("Out of stock", "", "error");
+          new swal("Product already added to cart", "", "warning");
+        } else if (response.status === "non existing") {
+          new swal("Product added to cart", "", "success");
+        } else if (response.status === "out of stock") {
+          new swal("Out of stock", "", "error");
         }
       },
     });

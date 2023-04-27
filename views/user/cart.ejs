@@ -83,7 +83,7 @@
                 <button class="cart-item-count ml-3" onclick="changeQuantity('<%=product._id%>','<%=cartId%>',1)">+</button>                     
               </td>
               <td class="total-col"><%=product.total%></td>
-              <td><button type="button" class="btn btn-danger" style="width: 40px;"  onclick="removeItem('<%=product._id%>')">remove</button></td>
+              <td><button type="button" class="btn btn-danger" style="width: 40px;"  onclick="confirmremoveItem('<%=product._id%>')">remove</button></td>
               
             </tr>
             <% })%>
@@ -168,6 +168,11 @@
     <!-- Main JS File -->
 
     <script src="../../assets/main.js"></script>
+    <link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
 
 
 <script>
@@ -185,10 +190,10 @@
       method: 'post',
       success: (response) => {
         if(response.removeProduct){
-          alert(" product removed from cart")
+          new swal("Item removed", "", "warning");
           location.reload()
         }else if(response.limitreached){
-          alert('limit reached')    
+          new swal("Out of stock", "", "warning");
         }else{
           document.getElementById(proid).innerHTML=quantity+count
           location.reload()
@@ -196,6 +201,24 @@
       }
     });
   }
+
+  function confirmremoveItem(proId) {
+  new swal({
+    title: 'Do you want to proceed?',
+    icon: 'warning',
+    showCancelButton: true,
+    showConfirmButton: true,
+    confirmButtonText: 'Yes'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      removeItem(proId);
+      new swal("Item Removed Successfully", "", "success");
+    } else if (result.dismiss === swal.DismissReason.cancel) {
+      new swal("Item not Removed", "", "info");
+    }
+  });
+}
+
 
 
   function removeItem( proid) {
@@ -206,7 +229,6 @@
       },
       method: 'post',
       success: (response) => {
-          alert(" product removed from cart")
           location.reload()
       }
     });

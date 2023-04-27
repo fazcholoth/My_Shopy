@@ -169,7 +169,9 @@ const categorySchema = new mongoose.Schema({
       city:String,
       contry:String,
       postalcode:String,
-    }
+    },
+    returnreason:String,
+    cancelreason:String
   })
 
   const coupenSchema = new mongoose.Schema({

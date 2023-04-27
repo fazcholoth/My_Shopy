@@ -26,11 +26,19 @@
           <% } else if (orders.status === "delivered") { %>
             <a href="/view-orderdetails/<%=orders._id%>"><button class="btn btn-sm btn-info">Order Details</button></a>
             <button class="btn btn-sm btn-primary" onclick="returnOrder('<%=orders._id%>')">Return</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#returnModal" data-order-id="<%=orders._id%>" >
+              Return Item
+            </button>
+            
           <% } else if (orders.status === "returned") { %>
             <a href="/view-orderdetails/<%=orders._id%>"><button class="btn btn-sm btn-info">Order Details</button></a>
           <% } else { %>
             <a href="/view-orderdetails/<%=orders._id%>"><button class="btn btn-sm btn-info">Order Details</button></a>
             <button class="btn btn-sm btn-danger" onclick="cancelOrder('<%=orders._id%>')">Cancel Order</button>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelModal" data-cancelorder-id="<%=orders._id%>">
+              Cancel Order
+            </button>
+            
           <% } %>
           
 
@@ -42,13 +50,18 @@
   </table>
 </div>
 
-
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
 <script>
-  function cancelOrder( orderid) {
+  function cancelOrder( orderid,reason) {
       $.ajax({
         url: '/cancel-order',
         data: {
           orderId: orderid,
+          reason:reason
         },
         method: 'post',
         success: (response) => {
@@ -59,11 +72,12 @@
     }
 
 
-    function returnOrder( orderid) {
+    function returnOrder( orderid,reason) {
       $.ajax({
         url: '/return-order',
         data: {
           orderId: orderid,
+          reason:reason
         },
         method: 'post',
         success: (response) => {
@@ -75,5 +89,96 @@
 </script>
 
 
-  <%-include('../partials/userfooter')-%>
+<div class="modal fade" id="returnModal" tabindex="-1" role="dialog" aria-labelledby="returnModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="returnModalLabel">Return Item</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="form-group">
+            <label for="returnReason">Reason for return</label>
+            <textarea class="form-control" id="returnReason" rows="3"></textarea>
+            <input type="hidden" id="orderId" value="">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="submitReturnForm()">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cancel Modal -->
+<div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="cancelModalLabel">Cancel Order</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="Modal-body">
+        <form>
+          <div class="form-group">
+            <label for="cancelReason">Reason for cancellation</label>
+            <textarea class="form-control" id="cancelReason" rows="3"></textarea>
+            <input type="hidden" id="cancelorderId" value="">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="submitCancelForm()">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+   $('#cancelModal').on('show.bs.modal', function (event) {
+    var Button = $(event.relatedTarget) // Button that triggered the modal
+    var OrderId = Button.data('cancelorder-id') // Extract order id from data-* attributes
+    var Modal = $(this)
+    Modal.find('.Modal-body #cancelorderId').val(OrderId) // Set the value of the hidden input field for order id
+  })
+
+  function submitCancelForm() {
+    var orderID = $('#cancelorderId').val()
+    var cancelReason = $('#cancelReason').val()
+    // Do something with orderId and cancelReason
+    cancelOrder( orderID,cancelReason)
+  }
+
+  $('#returnModal').on('show.bs.modal', function (event) {
+    const button = $(event.relatedTarget) // Button that triggered the modal
+    const orderId = button.data('order-id') // Extract order id from data-* attributes
+    const modal = $(this)
+    modal.find('.modal-body #orderId').val(orderId) // Set the value of the hidden input field for order id
+    
+  })
+
+  function submitReturnForm() {
+    let orderId = $('#orderId').val()
+    let returnReason = $('#returnReason').val()
+    // Do something with orderId, productId, and returnReason
+    returnOrder( orderId ,returnReason) 
+  }
+</script>
+
+<!-- Return Modal -->
+
+
+
+
+
+<%-include('../partials/userfooter')-%>
   
