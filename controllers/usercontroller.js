@@ -304,7 +304,7 @@ module.exports = {
       .catch((err) => {
         console.log(err);
         res.json({ status: false });
-      });
+      }); 
   },
   cancelOrder: async (req, res) => {
     const orderId = req.body.orderId;

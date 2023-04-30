@@ -38,10 +38,12 @@
                         
                     <% } %> 
                     <% if (order.status === "returned"&&order.paymentstatus==="paid") { %>
-                        <button class="btn btn-danger btn-sm" onclick="approveReturn('<%=order.userId%>','<%=order.total%>')">Approve</button>
+                        <button class="btn btn-danger btn-sm" onclick="approveReturn('<%=order.userId._id%>','<%=order.total%>')">Approve</button>
                         <% } %> 
+                        
                   </td>
                   <td>
+                    
                     <a href="/admin/order-details/<%=order._id%>"><button class="btn btn-success btn-sm" >Details</button></a>
                   </td>               
               </tr>
@@ -108,6 +110,7 @@
     }
 
     function approveReturn(userId,total) {
+      console.log('jjjjj');
       total=parseInt(total)
       $.ajax({
         url: '/admin/approve-return',

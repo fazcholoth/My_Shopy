@@ -146,6 +146,7 @@ module.exports = {
     });
   },
   deleteProduct: (productId) => {
+    var g
     console.log(productId);
     return new Promise(async (resolve, reject) => {
       await db.product

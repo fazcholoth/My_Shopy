@@ -149,3 +149,34 @@ const emailError = document.getElementById('email-error');
 if(categoryData.categorydiscount!==0){
     await db.product.updateMany({Category:categoryData.categoryname},{$inc:{Price:-categoryData.categorydiscount},$set:{Firstprice:'$Price'}})
   }
+
+
+
+
+
+  server {
+    listen 80;
+    listen [::]:80;
+
+    root /var/www/myshopy.store/html;
+    index index.html index.htm index.nginx-debian.html;
+
+    server_name myshopy.store www.myshopy.store;
+
+    location / {
+            try_files $uri $uri/ =404;
+    }
+}
+
+const http=require("http");
+
+const hostname = 'localhost';
+const port =3000;
+const server =http.createServer((req,res)=>{
+    res.statusCode =200;
+    res.setHeader('Content-Type','text/plain');
+    res.end('hello world');
+})
+server.listen(port,hostname,()=>{
+    consol.log('sever running')
+})
