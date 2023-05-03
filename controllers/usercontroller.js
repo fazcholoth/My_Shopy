@@ -14,7 +14,7 @@ module.exports = {
     if (req.session.user) {
       cartcount = await userhelper.getCartcount(req.session.user._id);
     }
-    // const categories = await listedCategories();
+     const categories = await listedCategories();
     userhelper.getHome(req.query.page).then(({prodata,currentpage,totalpages}) => {
       console.log(totalpages);
       res.render("user/userhome", { user, prodata,currentpage,totalpages,cartcount, });
