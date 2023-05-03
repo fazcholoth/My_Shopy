@@ -4,98 +4,186 @@ const bcrypt = require("bcrypt");
 var currentdate = new Date();
 var date = currentdate.toLocaleDateString();
 const year = 2022; // Replace with the desired year
+const moment = require('moment');
 
 module.exports = {
-  adminlogin: async () => {
-    const result = await db.order.aggregate([
-      {
-        $match: {
-          orderDate: { $exists: true },
+  adminlogin: async (sort) => {
+    if (sort =="monthly"){
+      console.log('jjjjjjjjjjjjjj');
+      const result = await db.order.aggregate([
+        {
+          $match: {
+            orderDate: {
+              $gte: new Date(moment().subtract(1, 'months').startOf('month')),
+              $lt: new Date(moment().subtract(1, 'months').endOf('month'))
+            }
+          }
         },
-      },
-      {
-        $group: {
-          _id: {
-            month: { $month: "$orderDate" },
-            year: { $year: "$orderDate" },
+        {
+          $group: {
+            _id: {
+              year: { $year: "$orderDate" },
+              month: { $month: "$orderDate" },
+              day: { $dayOfMonth: "$orderDate" }
+            },
+            count: { $sum: 1 }
+          }
+        },
+        {
+          $group: {
+            _id: null,
+            days: {
+              $push: {
+                year: "$_id.year",
+                month: "$_id.month",
+                day: "$_id.day",
+                count: "$count"
+              }
+            }
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            days: {
+              $map: {
+                input: {
+                  $range: [1, moment().subtract(1, 'months').endOf('month').date()]
+                },
+                as: "day",
+                in: {
+                  year: moment().subtract(1, 'months').year(),
+                  month: moment().subtract(1, 'months').month() + 1,
+                  day: "$$day",
+                  count: {
+                    $let: {
+                      vars: {
+                        matchingDay: {
+                          $filter: {
+                            input: "$days",
+                            as: "dayCount",
+                            cond: {
+                              $and: [
+                                { $eq: [ "$$dayCount.year", moment().subtract(1, 'months').year() ] },
+                                { $eq: [ "$$dayCount.month", moment().subtract(1, 'months').month() + 1 ] },
+                                { $eq: [ "$$dayCount.day", "$$day" ] }
+                              ]
+                            }
+                          }
+                        }
+                      },
+                      in: {
+                        $cond: {
+                          if: { $gt: [ { $size: "$$matchingDay" }, 0 ] },
+                          then: { $arrayElemAt: [ "$$matchingDay.count", 0 ] },
+                          else: 0
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]);
+      let period
+      console.log(result[0].days);
+      let data = result[0].days
+      return {period:'monthly',data:data}
+      
+    }else{
+      const result = await db.order.aggregate([
+        {
+          $match: {
+            orderDate: { $exists: true },
           },
-          count: { $sum: 1 },
         },
-      },
-      {
-        $group: {
-          _id: "$_id.year",
-          counts: {
-            $push: {
-              month: "$_id.month",
-              count: "$count",
+        {
+          $group: {
+            _id: {
+              month: { $month: "$orderDate" },
+              year: { $year: "$orderDate" },
+            },
+            count: { $sum: 1 },
+          },
+        },
+        {
+          $group: {
+            _id: "$_id.year",
+            counts: {
+              $push: {
+                month: "$_id.month",
+                count: "$count",
+              },
             },
           },
         },
-      },
-      {
-        $project: {
-          _id: 0,
-          year: "$_id",
-          counts: {
-            $concatArrays: [
-              {
-                $filter: {
-                  input: [
-                    { month: 1, count: 0 },
-                    { month: 2, count: 0 },
-                    { month: 3, count: 0 },
-                    { month: 4, count: 0 },
-                    { month: 5, count: 0 },
-                    { month: 6, count: 0 },
-                    { month: 7, count: 0 },
-                    { month: 8, count: 0 },
-                    { month: 9, count: 0 },
-                    { month: 10, count: 0 },
-                    { month: 11, count: 0 },
-                    { month: 12, count: 0 },
-                  ],
-                  as: "missing",
-                  cond: {
-                    $not: {
-                      $anyElementTrue: {
-                        $map: {
-                          input: "$counts",
-                          as: "count",
-                          in: { $eq: ["$$count.month", "$$missing.month"] },
+        {
+          $project: {
+            _id: 0,
+            year: "$_id",
+            counts: {
+              $concatArrays: [
+                {
+                  $filter: {
+                    input: [
+                      { month: 1, count: 0 },
+                      { month: 2, count: 0 },
+                      { month: 3, count: 0 },
+                      { month: 4, count: 0 },
+                      { month: 5, count: 0 },
+                      { month: 6, count: 0 },
+                      { month: 7, count: 0 },
+                      { month: 8, count: 0 },
+                      { month: 9, count: 0 },
+                      { month: 10, count: 0 },
+                      { month: 11, count: 0 },
+                      { month: 12, count: 0 },
+                    ],
+                    as: "missing",
+                    cond: {
+                      $not: {
+                        $anyElementTrue: {
+                          $map: {
+                            input: "$counts",
+                            as: "count",
+                            in: { $eq: ["$$count.month", "$$missing.month"] },
+                          },
                         },
                       },
                     },
                   },
                 },
-              },
-              "$counts",
-            ],
+                "$counts",
+              ],
+            },
           },
         },
-      },
-      {
-        $unwind: "$counts",
-      },
-      {
-        $replaceRoot: {
-          newRoot: {
-            year: "$year",
-            month: "$counts.month",
-            count: "$counts.count",
+        {
+          $unwind: "$counts",
+        },
+        {
+          $replaceRoot: {
+            newRoot: {
+              year: "$year",
+              month: "$counts.month",
+              count: "$counts.count",
+            },
           },
         },
-      },
-      {
-        $sort: {
-          year: 1,
-          month: 1,
+        {
+          $sort: {
+            year: 1,
+            month: 1,
+          },
         },
-      },
-    ]);
-
-    console.log(result);
-    return result;
+      ]);
+  let period
+      console.log(result);
+      return {period:"yearly",data:result}
+    }
+   
   },
   addProduct: (productData, filename) => {
     console.log(productData);

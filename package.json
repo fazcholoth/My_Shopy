@@ -23,6 +23,7 @@
     "jimpex": "^8.0.0",
     "jquery": "^3.6.4",
     "jquery-zoom": "^1.7.21",
+    "moment": "^2.29.4",
     "mongodb": "^5.1.0",
     "mongoose": "^7.0.1",
     "morgan": "~1.9.1",

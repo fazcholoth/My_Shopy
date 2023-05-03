@@ -6,8 +6,17 @@ let message = "";
 
 module.exports = {
   adminlogin: async (req, res) => {
-    const results = await adminhelper.adminlogin();
-    res.render("admin/admin-dash", { results: results });
+   
+    const results = await adminhelper.adminlogin(req.query.sort);
+    
+    if (req.query.sort){
+      let data = results.data
+      let period = results.period
+      res.json({data,period})
+    }else{
+      res.render("admin/admin-dash", { results: results.data });
+    }
+    
   },
   showAddproduct: (req, res) => {
     adminhelper.showAddproduct().then((cat) => {
