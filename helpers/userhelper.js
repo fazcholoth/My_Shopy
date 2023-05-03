@@ -1,5 +1,4 @@
-//const bcrypt = require("bcrypt")
-import bcrypt from "bcrypt"
+const bcrypt = require("bcrypt")
 const db = require("../models/model");
 const mongoose = require("mongoose");
 const { ObjectId } = require("mongodb");
