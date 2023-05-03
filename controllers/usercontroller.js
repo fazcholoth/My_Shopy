@@ -17,7 +17,7 @@ module.exports = {
      const categories = await listedCategories();
     userhelper.getHome(req.query.page).then(({prodata,currentpage,totalpages}) => {
       console.log(totalpages);
-      res.render("user/userhome", { user, prodata,currentpage,totalpages,cartcount, });
+      res.render("user/userhome", { user, prodata,currentpage,totalpages,cartcount,categories });
     });
   },
   showSignup: (req, res) => {
