@@ -189,6 +189,7 @@
         $.ajax({
           url: `/admin?sort=${selectedSort}`,
           method: "get",
+          timeout: 60000,
           success: function (response) {
             // Get the chart instance
             const myChart = Chart.getChart("myChart");

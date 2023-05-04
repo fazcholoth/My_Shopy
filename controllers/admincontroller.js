@@ -119,7 +119,8 @@ module.exports = {
     res.redirect("/admin/view-product");
   },
   viewOrders: async (req, res) => {
-    const orders = await adminhelper.viewOrders();
+    const orders = await adminhelper.viewOrders()
+    console.log(orders);
     res.render("admin/orders", { orders });
   },
   cancelOrder: async (req, res) => {
