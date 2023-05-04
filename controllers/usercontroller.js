@@ -263,7 +263,7 @@ module.exports = {
   postaddAddress: async (req, res) => {
     let users = req.session.user;
     await userhelper.postaddAddress(req.body, users);
-    res.redirect("/check-out");
+    res.redirect("/check-out")
   },
   viewOrders: async (req, res) => {
     let user = req.session.user;
