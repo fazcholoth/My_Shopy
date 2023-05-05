@@ -25,7 +25,7 @@
             
           <% } else if (orders.status === "delivered") { %>
             <a href="/view-orderdetails/<%=orders._id%>"><button class="btn btn-sm btn-info">Order Details</button></a>
-            <button class="btn btn-sm btn-primary" onclick="returnOrder('<%=orders._id%>')">Return</button>
+           
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#returnModal" data-order-id="<%=orders._id%>" >
               Return Item
             </button>
@@ -34,7 +34,7 @@
             <a href="/view-orderdetails/<%=orders._id%>"><button class="btn btn-sm btn-info">Order Details</button></a>
           <% } else { %>
             <a href="/view-orderdetails/<%=orders._id%>"><button class="btn btn-sm btn-info">Order Details</button></a>
-            <button class="btn btn-sm btn-danger" onclick="cancelOrder('<%=orders._id%>')">Cancel Order</button>
+            
             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#cancelModal" data-cancelorder-id="<%=orders._id%>">
               Cancel Order
             </button>
