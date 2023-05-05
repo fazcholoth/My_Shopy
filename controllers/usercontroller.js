@@ -483,7 +483,7 @@ module.exports = {
     }
     const categories = await listedCategories();
     const products = await userhelper.viewWishlist(user._id)
-    res.render("user/wishlist", {
+    res.render("user/validation", {
       products,
       cartcount,
       user,

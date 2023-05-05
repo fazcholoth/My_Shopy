@@ -1,182 +1,377 @@
-<script>
-
-    var nameError = document.getElementById('name-error');
-    var emailError = document.getElementById('email-error');
-    var passwordError = document.getElementById('password-error');
-    // var passwordError = document.getElementById('phone-error');
-    var submitError = document.getElementById('submit-error');
-
-    function validateName() {
-        var name = document.getElementById('name').value;
-        if (name.length == 0) {
-            nameError.innerHTML = 'Name is required';
-            return false;
-        }
-        if (!name.match(/^[A-Za-z]/)) {
-            nameError.innerHTML = 'Invalid name';
-            return false;
-        }
-        nameError.innerHTML = '';
-        return true;
-    }
-
-    function validateEmail() {
-        var email = document.getElementById('email').value;
-        if (email.length == 0) {
-            emailError.innerHTML = 'Email is required';
-            return false;
-        }
-        if (!email.match(/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/)) {
-            emailError.innerHTML = 'Email invalid';
-            return false;
-        }
-        emailError.innerHTML = '';
-        return true;
-    }
-
-    function validatePassword() {
-        var password = document.getElementById('password').value;
-        var passChecker = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,20}$/;
-        if (password.match(passChecker)) {
-            passwordError.innerHTML = '';
-            return true;
-        } else {
-            passwordError.innerHTML = 'invlid password';
-            return false;
-        }
-    }
-
-    // function validatePhoneNumber() {
-    //     var phone = document.getElementById('phone').value;
-    //     var submitError = document.getElementById('submit-error');
-
-    //     var re = /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/im;
-
-    //     return re.test(phone);
-    // }
-
-    function validateForm() {
-        if (!validateName() || !validateEmail() || !validatePassword()) {
-            submitError.style.display = 'flex';
-            submitError.style.justifyContent = 'center';
-            submitError.innerHTML = 'All fields are required';
-            setTimeout(() => {
-                submitError.style.display = 'none';
-            }, 3000);
-            return false;
-        }
-    }
 
 
-</script>
+<%-include('../partials/userheader')-%>
+<div class="page-content">
+    <div class="container">
+      <div class="products">
+        <div class="row">
+            <% if (products.length > 0) { %>
+          <% products.forEach(function(product) { %>
+          <div class="col-6 col-md-4 col-lg-4 col-xl-3">
+            <div class="product product-7 text-center">
+              <figure class="product-media">
+                <a href="/product-detail/<%= product._id %>">
+                  <img
+                    src="<%= product.image[0] %>"
+                    alt="Product image"
+                    class="product-image"
+                  />
+                </a>
 
+                <div class="product-action-vertical">
+                  <a
+                    href="#"
+                    class="btn-product-icon btn-wishlist btn-expandable"
+                    ><span>add to wishlist</span></a
+                  >
+                  <a
+                    href="#"
+                    class="btn-product-icon btn-quickview"
+                    title="Quick view"
+                    ><span>Quick view</span></a
+                  >
+                  <a
+                    href="#"
+                    class="btn-product-icon btn-compare"
+                    title="Compare"
+                    ><span>Compare</span></a
+                  >
+                </div>
+                <!-- End .product-action-vertical -->
 
+                <div class="product-action">
+                  <button
+                    class="btn-product btn-cart"
+                    onclick="addTocart('<%= product._id %>')"
+                  >
+                    <span>add to cart</span>
+                  </button>
+                </div>
+                <!-- End .product-action -->
+              </figure>
+              <!-- End .product-media -->
 
-<form action="/signup" method="POST" class="register-form" id="register-form">
-    <div class="form-group">
-        <label for="name"><i class="zmdi zmdi-account material-icons-name"></i></label>
-        <input  type="text" name="name" id="name" placeholder="Your Name" onkeyup="validateName()" />
+              <div
+                class="product-body"
+                style="background-color: rgb(250, 212, 228)"
+              >
+                <div class="product-cat">
+                  <a href="#"><%= product.category %></a>
+                </div>
+                <!-- End .product-cat -->
+                <h3 class="product-title">
+                  <a href="/product-detail/<%= product._id %>"
+                    ><%= product.name %></a
+                  >
+                </h3>
+                <!-- End .product-title -->
+                <% if (product.Firstprice==0) { %>
+
+                <div class="product-price">
+                  <p><%= product.Price %></p>
+                </div>
+                <% } else { %>
+                <div class="product-price">
+                  <p>
+                    <span style="text-decoration: line-through"
+                      ><%= product.Firstprice %></span
+                    >
+                    Discount Rate <%= product.Price %>
+                  </p>
+                </div>
+
+                <% } %>
+                <!-- End .product-price -->
+                <div class="ratings-container">
+                  <div class="ratings">
+                    <div class="ratings-val" style="width: 0%"></div>
+                    <!-- End .ratings-val -->
+                  </div>
+                  <!-- End .ratings -->
+                  <span class="ratings-text">( 0 Reviews )</span>
+                </div>
+                <!-- End .rating-container -->
+
+                <!-- End .product-nav -->
+              </div>
+              <!-- End .product-body -->
+            </div>
+            <!-- End .product -->
+          </div>
+          <!-- End .col-6 col-md-4 col-lg-4 col-xl-3 -->
+          <% }); %>
+          <% } else { %>
+           <h3>You Have No Whishlist</h3>
+          <% } %>
+
+        </div>
+        <!-- End .row -->
+
+        <div class="more-container text-center mt-2">
+          <a href="#" class="btn btn-outline-dark-2 btn-more"
+            ><span>show more</span></a
+          >
+          
+        </div>
+        <!-- End .load-more-container -->
+      </div>
+      <!-- End .products -->
     </div>
-    <span id="name-error" class="validation" style="color: red;"></span>
+    <!-- End .container -->
+  </div>
 
-    <div class="form-group">
-        <label for="email"><i class="zmdi zmdi-email"></i></label>
-        <input type="email" name="email" id="email" placeholder="Your Email" onkeyup="validateEmail()" />
+
+  <%-include('../partials/userfooter')-%>
+
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>Eshope</title>
+    <meta name="keywords" content="HTML5 Template" />
+    <meta name="description" content="Eshope" />
+    <meta name="author" content="p-themes" />
+    <!-- Favicon -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../../assets/images/icons/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../../assets/images/icons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../../assets/images/icons/favicon-16x16.png"
+    />
+    <link rel="manifest" href="../../assets/images/icons/site.html" />
+    <link
+      rel="mask-icon"
+      href="../../assets/images/icons/safari-pinned-tab.svg"
+      color="#666666"
+    />
+    <link rel="shortcut icon" href="../../assets/images/icons/favicon.ico" />
+    <meta name="apple-mobile-web-app-title" content="Molla" />
+    <meta name="application-name" content="Molla" />
+    <meta name="msapplication-TileColor" content="#cc9966" />
+    <meta
+      name="msapplication-config"
+      content="../../assets/images/icons/browserconfig.xml"
+    />
+    <meta name="theme-color" content="#ffffff" />
+    <!-- Plugins CSS File -->
+    <link rel="stylesheet" href="../../assets/css/bootstrap.min.css" />
+    <!-- Main CSS File -->
+    <link rel="stylesheet" href="../../assets/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="../../assets/css/plugins/owl-carousel/owl.carousel.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../assets/css/plugins/magnific-popup/magnific-popup.css"
+    />
+    <link
+      rel="stylesheet"
+      href="../../assets/css/plugins/nouislider/nouislider.css"
+    />
+  </head>
+  
+  <%-include('../partials/userheader')-%>
+  
+  <main class="main" style="background-color: rgb(236, 239, 239)">
+    <div
+      class="page-header text-center"
+      style="background-image: url('assets/images/page-header-bg.jpg')"
+    >
+      <div class="container">
+        <h1 class="page-title"><%=products.Category%></h1>
+      </div>
+      <!-- End .container -->
     </div>
-    <span id="email-error" class="validation" style="color: red;"></span>
-
-    <div class="form-group">
-        <label for="pass"><i class="zmdi zmdi-lock"></i></label>
-        <input type="password" name="password" id="password" placeholder="Password" onkeyup="validatePassword()" />
+    <!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav mb-2">
+      <div class="container">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+          <li class="breadcrumb-item"><a href="#">Shop</a></li>
+          <li class="breadcrumb-item"><a href="#">No Sidebar</a></li>
+        </ol>
+      </div>
+      <!-- End .container -->
+    </nav>
+    <!-- End .breadcrumb-nav -->
+    <h1 class="page-title"><%=products.Category%></h1>
+    <div class="page-content">
+      <div class="container">
+        <div class="products">
+          <div class="row">
+             
+            <% products.forEach(function(product) { %>
+            <div class="col-6 col-md-4 col-lg-4 col-xl-3">
+              <div class="product product-7 text-center">
+                <figure class="product-media">
+                  <a href="/product-detail/<%= product._id %>">
+                    <img
+                      src="<%= product.image[0] %>"
+                      alt="Product image"
+                      class="product-image"
+                    />
+                  </a>
+  
+                  <div class="product-action-vertical">
+                    <a
+                      href="#"
+                      class="btn-product-icon btn-wishlist btn-expandable"
+                      ><span>add to wishlist</span></a
+                    >
+                    <a
+                      href="#"
+                      class="btn-product-icon btn-quickview"
+                      title="Quick view"
+                      ><span>Quick view</span></a
+                    >
+                    <a
+                      href="#"
+                      class="btn-product-icon btn-compare"
+                      title="Compare"
+                      ><span>Compare</span></a
+                    >
+                  </div>
+                  <!-- End .product-action-vertical -->
+  
+                  <div class="product-action">
+                    <button
+                      class="btn-product btn-cart"
+                      onclick="addTocart('<%= product._id %>')"
+                    >
+                      <span>add to cart</span>
+                    </button>
+                  </div>
+                  <!-- End .product-action -->
+                </figure>
+                <!-- End .product-media -->
+  
+                <div
+                  class="product-body"
+                  style="background-color: rgb(250, 212, 228)"
+                >
+                  <div class="product-cat">
+                    <a href="#"><%= product.category %></a>
+                  </div>
+                  <!-- End .product-cat -->
+                  <h3 class="product-title">
+                    <a href="/product-detail/<%= product._id %>"
+                      ><%= product.name %></a
+                    >
+                  </h3>
+                  <!-- End .product-title -->
+                  <% if (product.Firstprice==0) { %>
+  
+                  <div class="product-price">
+                    <p><%= product.Price %></p>
+                  </div>
+                  <% } else { %>
+                  <div class="product-price">
+                    <p>
+                      <span style="text-decoration: line-through"
+                        ><%= product.Firstprice %></span
+                      >
+                      Discount Rate <%= product.Price %>
+                    </p>
+                  </div>
+  
+                  <% } %>
+                  <!-- End .product-price -->
+                  <div class="ratings-container">
+                    <div class="ratings">
+                      <div class="ratings-val" style="width: 0%"></div>
+                      <!-- End .ratings-val -->
+                    </div>
+                    <!-- End .ratings -->
+                    <span class="ratings-text">( 0 Reviews )</span>
+                  </div>
+                  <!-- End .rating-container -->
+  
+                  <!-- End .product-nav -->
+                </div>
+                <!-- End .product-body -->
+              </div>
+              <!-- End .product -->
+            </div>
+            <!-- End .col-6 col-md-4 col-lg-4 col-xl-3 -->
+            <% }); %>
+           
+  
+          </div>
+          <!-- End .row -->
+  
+          <div class="more-container text-center mt-2">
+            <a href="#" class="btn btn-outline-dark-2 btn-more"
+              ><span>show more</span></a
+            >
+            
+          </div>
+          <!-- End .load-more-container -->
+        </div>
+        <!-- End .products -->
+      </div>
+      <!-- End .container -->
     </div>
-    <span id="password-error" class="validation" style="color: red;"></span>
-
-    <!-- <div class="form-group">
-        <label for="re-pass"><i class="zmdi zmdi-lock-outline"></i></label>
-        <input type="password" name="re_password" id="re_pass" placeholder="Repeat your password"/>
-    </div> -->
-
-
-    <div class="form-group">
-        <label for="name"><i class="zmdi zmdi-phone"></i></label>
-        <input type="number" name="phone" id="phone" placeholder="Phone number"  />
-        <span id="phone-error" class="validation" style="color: red;"></span>
-    </div>
-
-
-    
-    <div class="form-group">
-        <input type="checkbox" name="agree-term" id="agree-term" class="agree-term" />
-        <label for="agree-term" class="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" class="term-service">Terms of service</a></label>
-    </div>
-    <span id="submit-error" class="validation" style="color: red;"></span>
-
-    <div class="form-group form-button">
-        <input type="submit"  id="signup" class="form-submit" value="Register" onclick=" return validateForm()" />
-    </div>
-</form>
-
-
-
-
-<!--    <li><a href="category.html">Cart <span class="badge badge-light"><%=cartcount%></span></a></li> -->
-
-
-<script>
-    function addTocart(proId){
-        $.ajax({
-            url:"/addto-cart/"+proId,
-            method:'get',
-            success:(Response)=>{
-                alert(response)
-            }
-        })
+    <!-- End .page-content -->
+  </main>
+  <!-- End .main -->
+  <%-include('../partials/userfooter')-%>
+  
+  <script src="../../assets/js/jquery.min.js"></script>
+  <script src="../../assets/js/bootstrap.bundle.min.js"></script>
+  <script src="../../assets/js/jquery.hoverIntent.min.js"></script>
+  <script src="../../assets/js/jquery.waypoints.min.js"></script>
+  <script src="../../assets/js/superfish.min.js"></script>
+  <script src="../../assets/js/owl.carousel.min.js"></script>
+  <script src="../../assets/js/bootstrap-input-spinner.js"></script>
+  <script src="../../assets/js/jquery.elevateZoom.min.js"></script>
+  <script src="../../assets/js/bootstrap-input-spinner.js"></script>
+  <script src="../../assets/js/jquery.magnific-popup.min.js"></script>
+  <!-- Main JS File -->
+  
+  <script src="../../assets/main.js"></script>
+  
+  <!-- Add these links to your HTML file -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css"
+  />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+  
+  <script>
+    function addTocart(proId) {
+      $.ajax({
+        url: "/addto-cart/" + proId,
+        method: "get",
+        success: (response) => {
+          if (response.status == "non existing") {
+            let count = $("#cart-count").html();
+            count = parseInt(count) + 1;
+            $("#cart-count").html(count);
+          }
+          if (response.status === "existing") {
+            new swal("Product already added to cart", "", "warning");
+          } else if (response.status === "non existing") {
+            new swal("Product added to cart", "", "success");
+          } else if (response.status === "out of stock") {
+            new swal("Out of stock", "", "error");
+          }
+        },
+      });
     }
-</script>
-
-
-<div class="cart-product-quantity">
-    <input type="number" class="form-control" value="1" min="1" max="10" step="1" data-decimals="0" required>
-</div><!-- End .cart-product-quantity -->
-
-
-
-
-
-const emailError = document.getElementById('email-error');
-
-
-if(categoryData.categorydiscount!==0){
-    await db.product.updateMany({Category:categoryData.categoryname},{$inc:{Price:-categoryData.categorydiscount},$set:{Firstprice:'$Price'}})
-  }
-
-
-
-
-
-  server {
-    listen 80;
-    listen [::]:80;
-
-    root /var/www/myshopy.store/html;
-    index index.html index.htm index.nginx-debian.html;
-
-    server_name myshopy.store www.myshopy.store;
-
-    location / {
-            try_files $uri $uri/ =404;
-    }
-}
-
-const http=require("http");
-
-const hostname = 'localhost';
-const port =3000;
-const server =http.createServer((req,res)=>{
-    res.statusCode =200;
-    res.setHeader('Content-Type','text/plain');
-    res.end('hello world');
-})
-server.listen(port,hostname,()=>{
-    consol.log('sever running')
-})
+  </script>
+  
