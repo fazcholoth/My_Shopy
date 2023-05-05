@@ -60,6 +60,17 @@ const userschema = new mongoose.Schema({
 });
 
 
+const WishlistSchema = new mongoose.Schema({
+  userId:  {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
+  },
+  productIds: [{
+    type:mongoose.Schema.Types.ObjectId,
+    ref: 'product'
+  }]
+});
+
 const cartschema = new mongoose.Schema({
   userId: {
     type:mongoose.Schema.Types.ObjectId,
@@ -247,5 +258,6 @@ module.exports = {
   order: mongoose.model("order", orderschema),
   address:mongoose.model('address', addressSchema),
   wallet:mongoose.model('wallet', walletschema ),
-  coupen:mongoose.model('coupen', coupenSchema )
+  coupen:mongoose.model('coupen', coupenSchema ),
+  wishlist:mongoose.model('wishlist', WishlistSchema )
 };

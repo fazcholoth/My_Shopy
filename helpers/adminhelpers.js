@@ -9,7 +9,6 @@ const moment = require('moment');
 module.exports = {
   adminlogin: async (sort) => {
     if (sort =="monthly"){
-      console.log('jjjjjjjjjjjjjj');
       const result = await db.order.aggregate([
         {
           $match: {

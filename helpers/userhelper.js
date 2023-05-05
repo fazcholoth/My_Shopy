@@ -1,4 +1,4 @@
-const bcrypt = require("bcrypt")
+const bcrypt = require("bcrypt");
 const db = require("../models/model");
 const mongoose = require("mongoose");
 const { ObjectId } = require("mongodb");
@@ -242,9 +242,9 @@ module.exports = {
     );
     return item;
   },
-  categoryView: (category,page) => {
+  categoryView: (category, page) => {
     const itemsperPage = 8;
-    const currentpage = page||1;
+    const currentpage = page || 1;
     const offset = (currentpage - 1) * itemsperPage;
     return new Promise(async (resolve, reject) => {
       const allproducts = await db.product
@@ -459,23 +459,28 @@ module.exports = {
         });
     });
   },
-  cancelOrder: async (orderId,reason) => {
-    try{
+  cancelOrder: async (orderId, reason) => {
+    try {
       console.log(orderId);
       await db.order.updateOne(
         { _id: orderId },
-        { $set: { status: "cancelled",cancelreason:reason } }
+        { $set: { status: "cancelled", cancelreason: reason } }
       );
       return;
-    }catch(err) {
-       console.log(error);
+    } catch (err) {
+      console.log(error);
     }
-    
   },
-  returnOrder: async (orderId,reason) => {
+  returnOrder: async (orderId, reason) => {
     await db.order.updateOne(
       { _id: orderId },
-      { $set: { status: "returned", paymentstatus: "paid",returnreason:reason } }
+      {
+        $set: {
+          status: "returned",
+          paymentstatus: "paid",
+          returnreason: reason,
+        },
+      }
     );
     return;
   },
@@ -543,10 +548,10 @@ module.exports = {
     await db.address.deleteOne({ _id: addressId });
     return;
   },
-  viewallProducts: async (filter, sort,page) => {
+  viewallProducts: async (filter, sort, page) => {
     const itemsperPage = 2;
-    const currentpage = page||1;
-    console.log('page...'+page);
+    const currentpage = page || 1;
+    console.log("page..." + page);
     const offset = (currentpage - 1) * itemsperPage;
 
     const query = {};
@@ -570,7 +575,7 @@ module.exports = {
         .sort({ Price: -1 })
         .skip(offset)
         .limit(itemsperPage);
-      
+
       return { products, totalpages, currentpage };
     } else if (sort && sort === "acent") {
       if (filter && filter.color) {
@@ -593,7 +598,6 @@ module.exports = {
         .skip(offset)
         .limit(itemsperPage);
 
-      
       return { products, totalpages, currentpage };
     } else {
       if (filter && filter.color) {
@@ -613,8 +617,56 @@ module.exports = {
         .skip(offset)
         .limit(itemsperPage);
 
-      
       return { products, totalpages, currentpage };
     }
+  },
+  addtoWishlist: async (userId, productId) => {
+    let exist = await db.wishlist.findOne({
+      productIds: { $in: [productId] },
+      userId: userId,
+    });
+  
+    if (exist) {
+      return "already added";
+    } else {
+     
+      const item = await db.wishlist.updateOne(
+        { userId: userId },
+        { $push: { productIds: productId } },
+        { upsert: true }
+      ); 
+    
+      return "added";
+      
+    }
+  }
+  
+  ,
+  viewWishlist: async (userId) => {
+    const wishlist = await db.wishlist.find();
+    const wish = await db.wishlist
+      .findOne({ userId: userId })
+      .populate("productIds")
+      .exec();
+    if(wish.length>0){
+      const products = wish.productIds.map(
+        ({ _id, Productname, Price,Firstprice,Image, Category }) => ({
+          _id: _id,
+          name: Productname,
+          Price: Price,
+          Firstprice:Firstprice,
+          quantity: 1, 
+          total: Price, 
+          image: Image,
+          category: Category,
+        })
+      );
+      console.log(products);
+      return products;
+    }else{
+      let products =[]
+      return products
+    }
+    
   },
 };

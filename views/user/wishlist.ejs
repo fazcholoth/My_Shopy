@@ -1,0 +1,124 @@
+
+
+<%-include('../partials/userheader')-%>
+<div class="page-content">
+    <div class="container">
+      <div class="products">
+        <div class="row">
+            <% if (products.length > 0) { %>
+          <% products.forEach(function(product) { %>
+          <div class="col-6 col-md-4 col-lg-4 col-xl-3">
+            <div class="product product-7 text-center">
+              <figure class="product-media">
+                <a href="/product-detail/<%= product._id %>">
+                  <img
+                    src="<%= product.image[0] %>"
+                    alt="Product image"
+                    class="product-image"
+                  />
+                </a>
+
+                <div class="product-action-vertical">
+                  <a
+                    href="#"
+                    class="btn-product-icon btn-wishlist btn-expandable"
+                    ><span>add to wishlist</span></a
+                  >
+                  <a
+                    href="#"
+                    class="btn-product-icon btn-quickview"
+                    title="Quick view"
+                    ><span>Quick view</span></a
+                  >
+                  <a
+                    href="#"
+                    class="btn-product-icon btn-compare"
+                    title="Compare"
+                    ><span>Compare</span></a
+                  >
+                </div>
+                <!-- End .product-action-vertical -->
+
+                <div class="product-action">
+                  <button
+                    class="btn-product btn-cart"
+                    onclick="addTocart('<%= product._id %>')"
+                  >
+                    <span>add to cart</span>
+                  </button>
+                </div>
+                <!-- End .product-action -->
+              </figure>
+              <!-- End .product-media -->
+
+              <div
+                class="product-body"
+                style="background-color: rgb(250, 212, 228)"
+              >
+                <div class="product-cat">
+                  <a href="#"><%= product.category %></a>
+                </div>
+                <!-- End .product-cat -->
+                <h3 class="product-title">
+                  <a href="/product-detail/<%= product._id %>"
+                    ><%= product.name %></a
+                  >
+                </h3>
+                <!-- End .product-title -->
+                <% if (product.Firstprice==0) { %>
+
+                <div class="product-price">
+                  <p><%= product.Price %></p>
+                </div>
+                <% } else { %>
+                <div class="product-price">
+                  <p>
+                    <span style="text-decoration: line-through"
+                      ><%= product.Firstprice %></span
+                    >
+                    Discount Rate <%= product.Price %>
+                  </p>
+                </div>
+
+                <% } %>
+                <!-- End .product-price -->
+                <div class="ratings-container">
+                  <div class="ratings">
+                    <div class="ratings-val" style="width: 0%"></div>
+                    <!-- End .ratings-val -->
+                  </div>
+                  <!-- End .ratings -->
+                  <span class="ratings-text">( 0 Reviews )</span>
+                </div>
+                <!-- End .rating-container -->
+
+                <!-- End .product-nav -->
+              </div>
+              <!-- End .product-body -->
+            </div>
+            <!-- End .product -->
+          </div>
+          <!-- End .col-6 col-md-4 col-lg-4 col-xl-3 -->
+          <% }); %>
+          <% } else { %>
+           <h3>You Have No Whishlist</h3>
+          <% } %>
+
+        </div>
+        <!-- End .row -->
+
+        <div class="more-container text-center mt-2">
+          <a href="#" class="btn btn-outline-dark-2 btn-more"
+            ><span>show more</span></a
+          >
+          
+        </div>
+        <!-- End .load-more-container -->
+      </div>
+      <!-- End .products -->
+    </div>
+    <!-- End .container -->
+  </div>
+
+
+  <%-include('../partials/userfooter')-%>

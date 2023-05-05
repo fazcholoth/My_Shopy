@@ -466,4 +466,28 @@ module.exports = {
         });
     }
   },
+  addtoWishlist:async(req,res)=>{
+    let userId = req.session.user._id;
+    let status = await userhelper.addtoWishlist(userId, req.params.id);
+    if (status=="added"){
+      res.json({status:"added"})
+    }else{
+      res.json({status:"already added"})
+    }
+  },
+  viewWishlist:async(req,res)=>{
+    let user = req.session.user;
+    let cartcount = null;
+    if (req.session.user) {
+      cartcount = await userhelper.getCartcount(req.session.user._id);
+    }
+    const categories = await listedCategories();
+    const products = await userhelper.viewWishlist(user._id)
+    res.render("user/wishlist", {
+      products,
+      cartcount,
+      user,
+      categories,
+    })
+  }
 };

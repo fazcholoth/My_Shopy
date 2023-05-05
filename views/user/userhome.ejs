@@ -105,7 +105,7 @@
                         <img src="<%= prodata.Image[0] %>" alt="Product image" class="product-image">
                         </a>
                         <div class="product-action-vertical">
-                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>Add to Wishlist</span></a>
+                        <button class="btn-product-icon btn-wishlist btn-expandable" onclick="addTowishlist('<%=prodata._id%>')"><span> Add to Wishlist</span></button>
                         <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
                         <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
                         </div><!-- End .product-action-vertical -->
@@ -248,6 +248,28 @@
     function addTocart(proId){
         $.ajax({
             url:"/addto-cart/"+proId,
+            method:'get',
+            success:(response)=>{
+                if(response.status=='non existing'){
+                    let count=$('#cart-count').html()
+                    count=parseInt(count)+1
+                    $("#cart-count").html(count) 
+                }
+                if (response.status === "existing") {
+          new swal("Product already added to cart", "", "warning");
+        } else if (response.status === "non existing") {
+          new swal("Product added to cart", "", "success");
+        } else if (response.status === "out of stock") {
+          new swal("Out of stock", "", "error");
+        }
+            }
+        })
+    }
+
+
+    function addTowishlist(proId){
+        $.ajax({
+            url:"/addto-wishlist/"+proId,
             method:'get',
             success:(response)=>{
                 if(response.status=='non existing'){

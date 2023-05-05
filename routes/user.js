@@ -51,4 +51,6 @@ router.get('/delete-address/:addressId',controller.deleteAddress)
 router.post('/edit-address/:addressId',controller.posteditAddress)
 router.get('/view-profile',controller.viewProfile)
 router.get('/view-allproducts',controller.viewallProducts)
+router.get('/addto-wishlist/:id',verifylogin,controller.addtoWishlist)
+router.get('/view-wishlist',verifylogin,controller.viewWishlist)
 module.exports = router;
