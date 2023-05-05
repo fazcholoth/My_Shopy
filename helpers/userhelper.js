@@ -643,12 +643,11 @@ module.exports = {
   
   ,
   viewWishlist: async (userId) => {
-    const wishlist = await db.wishlist.find();
     const wish = await db.wishlist
       .findOne({ userId: userId })
       .populate("productIds")
       .exec();
-    if(wish.length>0){
+    if(wish){
       const products = wish.productIds.map(
         ({ _id, Productname, Price,Firstprice,Image, Category }) => ({
           _id: _id,
@@ -665,7 +664,7 @@ module.exports = {
       return products;
     }else{
       let products =[]
-      return products
+      return products;
     }
     
   },
