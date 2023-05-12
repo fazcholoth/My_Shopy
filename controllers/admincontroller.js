@@ -3,6 +3,7 @@ var cloudinary = require("../utils/cloudinary");
 var cloudinary = require("cloudinary").v2;
 
 let message = "";
+let Error=null
 
 module.exports = {
   adminlogin: async (req, res) => {
@@ -14,7 +15,7 @@ module.exports = {
       let period = results.period
       res.json({data,period})
     }else{
-      res.render("admin/admin-dash", { results: results.data });
+      res.render("admin/admin-dash", { results: results.data,totalrevenue:results.total,totalorders:results.orders ,totalproducts:results.products});
     }
     
   },
@@ -45,13 +46,16 @@ module.exports = {
   },
   showAddcategory: (req, res) => {
     adminhelper.showAddcategory().then((cat) => {
-      res.render("admin/addcategory", { cat });
+      res.render("admin/addcategory", { cat,Error});
     });
   },
   postAddcategory: (req, res) => {
     adminhelper.postAddcategory(req.body).then((existing) => {
       if (existing) {
-        res.redirect("/admin/add-category");
+        let Error ="already existing"
+        adminhelper.showAddcategory().then((cat) => {
+          res.render("admin/addcategory", { cat ,Error});
+        });
       } else {
         res.redirect("/admin/add-category");
       }
@@ -141,7 +145,8 @@ module.exports = {
   approveReturn: async (req, res) => {
     const userId = req.body.userId;
     const total = req.body.amount;
-    await adminhelper.approveReturn(userId, total);
+    const orderId = req.body.orderId;
+    await adminhelper.approveReturn(userId, total,orderId);
     res.json({ status: true });
   },
   viewCoupen: async (req, res) => {
@@ -167,4 +172,36 @@ module.exports = {
       res.render("admin/sales", { orders });
     }
   },
+  viewEditcategory:async(req,res)=>{
+    const catId = req.params.catId
+    const category = await adminhelper.showEditcategory(catId)
+    res.render("admin/edit-category", { category });
+  },
+  postEditcategory:async(req,res)=>{
+    const catId = req.params.catId
+    await adminhelper.postEditcategory(catId,req.body)
+    const cat = await adminhelper.showAddcategory()
+      res.render("admin/addcategory", { cat ,Error});
+  },
+  listCategory:async(req,res)=>{
+    const catId = req.params.catId
+    await adminhelper.listCategory(catId)
+    const cat = await adminhelper.showAddcategory()
+      res.render("admin/addcategory", { cat ,Error});
+  },
+  editCoupen:async(req,res)=>{
+    let coupenId = req.params.coupenId;
+    let coupen = await adminhelper.editCoupen(coupenId)
+    res.render("admin/edit-coupen",{coupen})
+  },
+  posteditCoupen:async(req,res)=>{
+    let coupenId = req.params.coupenId;
+    await adminhelper.posteditCoupen(req.body,coupenId)
+    res.redirect("/admin/view-coupens");
+  },
+  deleteCoupen:async(req,res)=>{
+    let coupenId = req.params.coupenId;
+    await adminhelper.deleteCoupen(coupenId)
+    res.redirect("/admin/view-coupens");
+  }
 };

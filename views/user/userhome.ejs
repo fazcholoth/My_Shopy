@@ -20,7 +20,7 @@
                             <h3 class="intro-subtitle text-white">You're Looking Good</h3><!-- End .h3 intro-subtitle -->
                             <h1 class="intro-title text-white">New Lookbook</h1><!-- End .intro-title -->
 
-                            <a href="category.html" class="btn btn-outline-white-4">
+                            <a href="/" class="btn btn-outline-white-4">
                                 <span>Discover More</span>
                             </a>
                         </div><!-- End .intro-content -->
@@ -31,7 +31,7 @@
                             <h3 class="intro-subtitle text-white">Don’t Miss</h3><!-- End .h3 intro-subtitle -->
                             <h1 class="intro-title text-white">Mysrety Deals</h1><!-- End .intro-title -->
 
-                            <a href="category.html" class="btn btn-outline-white-4">
+                            <a href="/" class="btn btn-outline-white-4">
                                 <span>Discover More</span>
                             </a>
                         </div><!-- End .intro-content -->
@@ -51,23 +51,23 @@
                                 </a>
 
                                 <div class="banner-content banner-content-center">
-                                    <h4 class="banner-subtitle text-white"><a href="#">New in</a></h4><!-- End .banner-subtitle -->
-                                    <h3 class="banner-title text-white"><a href="#"><strong>Women’s</strong></h3><!-- End .banner-title -->
-                                    <a href="#" class="btn btn-outline-white banner-link underline">Shop Now</a>
+                                    <h4 class="banner-subtitle text-white"><a href="/">New in</a></h4><!-- End .banner-subtitle -->
+                                    <h3 class="banner-title text-white"><a href="/"><strong>Women’s</strong></h3><!-- End .banner-title -->
+                                    <a href="/" class="btn btn-outline-white banner-link underline">Shop Now</a>
                                 </div><!-- End .banner-content -->
                             </div><!-- End .banner -->
                         </div><!-- End .col-sm-6 -->
 
                         <div class="col-sm-6">
                             <div class="banner banner-overlay">
-                                <a href="#">
+                                <a href="/">
                                     <img src="assets/images/demos/demo-6/banners/banner-2.jpg" alt="Banner">
                                 </a>
 
                                 <div class="banner-content banner-content-center">
-                                    <h4 class="banner-subtitle text-white"><a href="#">New in</a></h4><!-- End .banner-subtitle -->
-                                    <h3 class="banner-title text-white"><a href="#"><strong>Men’s</strong></a></h3><!-- End .banner-title -->
-                                    <a href="#" class="btn btn-outline-white banner-link underline">Shop Now</a>
+                                    <h4 class="banner-subtitle text-white"><a href="/">New in</a></h4><!-- End .banner-subtitle -->
+                                    <h3 class="banner-title text-white"><a href="/"><strong>Men’s</strong></a></h3><!-- End .banner-title -->
+                                    <a href="/" class="btn btn-outline-white banner-link underline">Shop Now</a>
                                 </div><!-- End .banner-content -->
                             </div><!-- End .banner -->
                         </div><!-- End .col-sm-6 -->
@@ -85,12 +85,7 @@
                         <li class="nav-item">
                             <a class="nav-link active" id="trending-all-link" data-toggle="tab" href="#trending-all-tab" role="tab" aria-controls="trending-all-tab" aria-selected="true">All</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="trending-women-link" data-toggle="tab" href="#trending-women-tab" role="tab" aria-controls="trending-women-tab" aria-selected="false">Women</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="trending-men-link" data-toggle="tab" href="#trending-men-tab" role="tab" aria-controls="trending-men-tab" aria-selected="false">Men</a>
-                        </li>
+                       
                     </ul>
                 </div><!-- End .heading -->
 
@@ -106,8 +101,8 @@
                         </a>
                         <div class="product-action-vertical">
                         <button class="btn-product-icon btn-wishlist btn-expandable" onclick="addTowishlist('<%=prodata._id%>')"><span> Add to Wishlist</span></button>
-                        <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                        <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                        
+                        
                         </div><!-- End .product-action-vertical -->
                         <div class="product-action">
                         <button class="btn-product btn-cart" onclick="addTocart('<%=prodata._id%>')">
@@ -142,7 +137,7 @@
                         <div class="ratings">
                         <div class="ratings-val" style="width: 0%;"></div><!-- End .ratings-val -->
                         </div><!-- End .ratings -->
-                        <span class="ratings-text">( 0 Reviews )</span>
+                       
                         </div><!-- End .rating-container -->
                         </div><!-- End .product-body -->
                         </div><!-- End .product -->
@@ -272,17 +267,10 @@
             url:"/addto-wishlist/"+proId,
             method:'get',
             success:(response)=>{
-                if(response.status=='non existing'){
-                    let count=$('#cart-count').html()
-                    count=parseInt(count)+1
-                    $("#cart-count").html(count) 
-                }
-                if (response.status === "existing") {
-          new swal("Product already added to cart", "", "warning");
-        } else if (response.status === "non existing") {
-          new swal("Product added to cart", "", "success");
-        } else if (response.status === "out of stock") {
-          new swal("Out of stock", "", "error");
+                if (response.status === "added") {
+                    new swal("Product added to whishlist", "", "success");
+        } else {
+            new swal("Product already added to whishlist", "", "warning");
         }
             }
         })

@@ -37,7 +37,7 @@
             <p>Whole data about your business here</p>
           </div>
           <div>
-            <a href="#" class="btn btn-primary"
+            <a href="/admin/view-sales/" class="btn btn-primary"
               ><i class="text-muted material-icons md-post_add"></i>Create
               report</a
             >
@@ -52,7 +52,7 @@
                 ></span>
                 <div class="text">
                   <h6 class="mb-1 card-title">Revenue</h6>
-                  <span>$13,456.5</span>
+                  <span><%=totalrevenue%></span>
                   <span class="text-sm"> Shipping fees are not included </span>
                 </div>
               </article>
@@ -66,7 +66,7 @@
                 ></span>
                 <div class="text">
                   <h6 class="mb-1 card-title">Orders</h6>
-                  <span>53.668</span>
+                  <span><%=totalorders%></span>
                   <span class="text-sm"> Excluding orders in transit </span>
                 </div>
               </article>
@@ -80,13 +80,13 @@
                 ></span>
                 <div class="text">
                   <h6 class="mb-1 card-title">Products</h6>
-                  <span>9.856</span>
-                  <span class="text-sm"> In 19 Categories </span>
+                  <span><%=totalproducts%></span>
+                  <span class="text-sm">in categories </span>
                 </div>
               </article>
             </div>
           </div>
-          <div class="col-lg-3">
+          <!-- <div class="col-lg-3">
             <div class="card card-body mb-4">
               <article class="icontext">
                 <span class="icon icon-sm rounded-circle bg-info-light"
@@ -99,7 +99,7 @@
                 </div>
               </article>
             </div>
-          </div>
+          </div> -->
         </div>
         <div class="row">
           <div class="filter-dates">
@@ -242,3 +242,4 @@
 
   <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:32:57 GMT -->
 </html>
+

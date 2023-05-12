@@ -12,7 +12,7 @@
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
                 <li class="breadcrumb-item"><a href="#">Shop</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Checkout</li>
             </ol>
@@ -27,7 +27,7 @@
           </div><!-- End .checkout-discount -->
             
           
-          <form action="/add-address" method="post" id="checkout-out-form">
+          <form action="/add-address?page=<%=Page%>" method="post" id="checkout-out-form">
               <div class="row">
                 <div class="col-lg-9">
                   <h2 class="checkout-title">Enter  your Address</h2><!-- End .checkout-title -->

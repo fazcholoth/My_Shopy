@@ -86,7 +86,8 @@
                                   <% if (users.blocked) { %>
                                     <a href="/admin/unblock-users/<%=users._id%>" class="btn btn-success">Unblock</a>
                                   <% } else { %>
-                                    <a href="/admin/block-users/<%=users._id%>" class="btn btn-danger">Block</a>
+                                    
+                                    <button  class="btn btn-danger" onclick="confirmremoveItem('<%=users._id%>')">Block</button>
                                   <% } %>
                                 </td>
                               </tr>
@@ -185,7 +186,11 @@
 
 <!-- DataTables Buttons JavaScript -->
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.7.0/js/dataTables.buttons.min.js"></script>
-
+<link
+rel="stylesheet"
+href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
 
 <script>
     $(document).ready(function () {
@@ -201,3 +206,23 @@
       $("#userTable").DataTable();
     });
   </script>
+
+
+<script>
+  function confirmremoveItem(userId) {
+  new swal({
+    title: 'Do you want to proceed?',
+    icon: 'warning',
+    showCancelButton: true,
+    showConfirmButton: true,
+    confirmButtonText: 'Yes'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Redirect to the delete route after user confirms the action
+      window.location.href = `/admin/block-users/${userId}`;
+    } else if (result.dismiss === swal.DismissReason.cancel) {
+      new swal("User not Blocked", "", "info");
+    }
+  });
+}
+</script>

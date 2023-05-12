@@ -83,9 +83,11 @@
                             <a href="/admin/edit-product/<%=response._id%>" class="btn btn-xs font-sm rounded btn-brand">
                               <i class="material-icons md-edit"></i> Edit
                             </a>
-                            <a href="/admin/delete-product/<%=response._id%>" class="btn btn-xs font-sm btn-light rounded">
-                              <i class="material-icons md-delete_forever"></i> Delete
-                            </a>
+                            <button
+                                 class="btn btn-xs font-sm btn-light rounded" onclick="confirmremoveItem('<%=response._id%>')">
+                                <i class="material-icons md-delete_forever"></i> Delete
+                            </button>
+                           
                             <% } %>
                           </td>
                         </tr>
@@ -118,6 +120,13 @@
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-products-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:12 GMT -->
 </html>
+
+
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
 
 <link
   rel="stylesheet"
@@ -187,4 +196,24 @@
   $(document).ready(function () {
     $("#productTable").DataTable();
   });
+
+
+
+  function confirmremoveItem(proId) {
+  new swal({
+    title: 'Do you want to proceed?',
+    icon: 'warning',
+    showCancelButton: true,
+    showConfirmButton: true,
+    confirmButtonText: 'Yes'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Redirect to the delete route after user confirms the action
+      window.location.href = `/admin/delete-product/${proId}`;
+    } else if (result.dismiss === swal.DismissReason.cancel) {
+      new swal("Item not Removed", "", "info");
+    }
+  });
+}
+
 </script>

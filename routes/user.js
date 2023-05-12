@@ -53,4 +53,5 @@ router.get('/view-profile',controller.viewProfile)
 router.get('/view-allproducts',controller.viewallProducts)
 router.get('/addto-wishlist/:id',verifylogin,controller.addtoWishlist)
 router.get('/view-wishlist',verifylogin,controller.viewWishlist)
+router.post('/changeprofile',verifylogin,controller.changeProfile)
 module.exports = router;

@@ -1,8 +1,8 @@
 const bcrypt = require("bcrypt");
-const db = require("../models/model");
+const db = require("../utils/database");
 const mongoose = require("mongoose");
 const { ObjectId } = require("mongodb");
-const { product } = require("../models/model");
+const { product } = require("../utils/database");
 const { response } = require("express");
 const twilio = require("../utils/twilio");
 const Razorpay = require("razorpay");
@@ -27,8 +27,10 @@ module.exports = {
         email: userData.email,
         phone: userData.phonenumber,
       };
-      await db.user.create(data);
-      resolve(data);
+      const userdata = await db.user.create(data)
+        resolve(userdata);
+      ;
+      
     });
   },
   doLogin: (userData) => {
@@ -286,44 +288,94 @@ module.exports = {
   },
   placeOrder: async (userId, products, address, total) => {
     let status = address.paymentmethod === "cash-on-delivery" ? true : false;
-    const addressId = address.address;
-    const deliveryAddress = await db.address.findOne({
-      _id: addressId,
-      userId: userId,
-    });
-    try {
-      const newOrder = new db.order({
+    if(address.paymentmethod === "wallet"){
+      const wallet = await db.wallet.findOne({userId:userId})
+      if(wallet&&wallet.balance>total){
+        const addressId = address.address;
+      const deliveryAddress = await db.address.findOne({
+        _id: addressId,
         userId: userId,
-        products: products,
-        total: total,
-        status: "placed",
-        paymentmethod: address.paymentmethod,
-        orderDate: new Date(),
-        Shippingadress: {
-          name: deliveryAddress.name,
-          street: deliveryAddress.street,
-          city: deliveryAddress.city,
-          contry: deliveryAddress.country,
-          postalcode: deliveryAddress.zipCode,
-        },
       });
-      const savedOrder = await newOrder.save();
-      await db.cart.deleteMany({ userId: userId });
-      for (const product of products) {
-        const productdocument = await db.product.findOne({
-          _id: product.productId,
+      try {
+        const newOrder = new db.order({
+          userId: userId,
+          products: products,
+          total: total,
+          status: "placed",
+          paymentmethod: address.paymentmethod,
+          orderDate: new Date(),
+          Shippingadress: {
+            name: deliveryAddress.name,
+            street: deliveryAddress.street,
+            city: deliveryAddress.city,
+            contry: deliveryAddress.country,
+            postalcode: deliveryAddress.zipCode,
+          },
         });
-        const newquantity = productdocument.Quantity - product.quantity;
-        await db.product.updateOne(
-          { _id: product.productId },
-          { $set: { Quantity: newquantity } }
-        );
+        const savedOrder = await newOrder.save();
+        await db.cart.deleteMany({ userId: userId });
+        for (const product of products) {
+          const productdocument = await db.product.findOne({
+            _id: product.productId,
+          });
+          const newquantity = productdocument.Quantity - product.quantity;
+          await db.product.updateOne(
+            { _id: product.productId },
+            { $set: { Quantity: newquantity } }
+          );
+        }
+        const newbalnce=wallet.balance-total
+        await db.wallet.updateOne({userId:userId},{$set:{balance:newbalnce}})
+        return savedOrder._id;
+      } catch (error) {
+        console.log(error.message);
+        throw new Error("Error while saving order");
       }
-      return savedOrder._id;
-    } catch (error) {
-      console.log(error.message);
-      throw new Error("Error while saving order");
+       
+      }else{
+        return null
+      }
+    }else{
+      const addressId = address.address;
+      const deliveryAddress = await db.address.findOne({
+        _id: addressId,
+        userId: userId,
+      });
+      try {
+        const newOrder = new db.order({
+          userId: userId,
+          products: products,
+          total: total,
+          status: "placed",
+          paymentmethod: address.paymentmethod,
+          orderDate: new Date(),
+          Shippingadress: {
+            name: deliveryAddress.name,
+            street: deliveryAddress.street,
+            city: deliveryAddress.city,
+            contry: deliveryAddress.country,
+            postalcode: deliveryAddress.zipCode,
+          },
+        });
+        const savedOrder = await newOrder.save();
+        await db.cart.deleteMany({ userId: userId });
+        for (const product of products) {
+          const productdocument = await db.product.findOne({
+            _id: product.productId,
+          });
+          const newquantity = productdocument.Quantity - product.quantity;
+          await db.product.updateOne(
+            { _id: product.productId },
+            { $set: { Quantity: newquantity } }
+          );
+        }
+        return savedOrder._id;
+      } catch (error) {
+        console.log(error.message);
+        throw new Error("Error while saving order");
+      }
     }
+   
   },
   generateRazorpay: (orderId, total) => {
     return new Promise((resolve, reject) => {
@@ -484,20 +536,26 @@ module.exports = {
     );
     return;
   },
-  applyCoupen: async (coupencode, subtotal) => {
+  applyCoupen: async (coupencode, subtotal,userId) => {
     const coupen = await db.coupen.findOne({ coupencode: coupencode });
+    if (coupen && coupen.userId.includes(userId)) {
+      return null
+    } else {
+    await db.coupen.updateOne({ coupencode:coupencode }, { $push: { userId: userId } });
     const discount = coupen.discount;
     const total = subtotal - discount;
     return {
       discount,
       total,
     };
+  }
   },
   viewCoupen: async () => {
-    const coupen = await db.coupen.find();
+    const coupen = await db.coupen.find({ expirydate: { $gte: currentdate } });
     return coupen;
   },
   searchProducts: async (query) => {
+    
     const regex = new RegExp(query, "i");
     const prodcuts = await db.product.find({ Productname: regex });
     return prodcuts;
@@ -668,4 +726,19 @@ module.exports = {
     }
     
   },
+  changeProfile:async(userId,profdata)=>{
+    const updateObj = {
+        name: profdata.name,
+        email: profdata.email,
+    }
+    if (profdata.newpassword) {
+        updateObj.password = await bcrypt.hash(profdata.newpassword, 10);
+    }
+    await db.user.updateOne({_id:userId},{$set:updateObj})
+    return
+},
+findbalance:async(userId)=>{
+let wallet = await db.wallet.findOne({userId:userId})
+return wallet
+}
 };

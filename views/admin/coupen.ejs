@@ -68,7 +68,12 @@
                 </p>
                 <small class="coupon-validity"
                   >Expiry Date:<%=coupen.expirydate%></small
-                >
+                ><br>
+                <div class="d-flex justify-content-between">
+                  <button  style="width: 75px;" class="btn btn-sm btn-info" onclick="editcoupen('<%= coupen._id %>')">Edit</button>
+                  <button  style="width: 75px;" class="btn btn-sm btn-danger"  onclick="confirmremoveItem('<%= coupen._id %>')">Delete</button>
+                </div>
+                
               </div>
             </div>
           </div>
@@ -78,3 +83,32 @@
     </div>
   </div>
 </div>
+
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+<script>
+  function editcoupen(coupenId) {
+      window.location.href = `/admin/edit-coupen/${coupenId}`;
+}
+
+function confirmremoveItem(coupenId) {
+  new swal({
+    title: 'Do you want to proceed?',
+    icon: 'warning',
+    showCancelButton: true,
+    showConfirmButton: true,
+    confirmButtonText: 'Yes'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Redirect to the delete route after user confirms the action
+      window.location.href = `/admin/delete-coupen/${coupenId}`;
+    } else if (result.dismiss === swal.DismissReason.cancel) {
+      new swal("Coupon not Removed", "", "info");
+    }
+  });
+}
+</script>

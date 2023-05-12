@@ -80,9 +80,8 @@
                                     </a>
                     
                                     <div class="product-action-vertical">
-                                        <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                                        <a href="#" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
-                                        <a href="#" class="btn-product-icon btn-compare" title="Compare"><span>Compare</span></a>
+                                        <button class="btn-product-icon btn-wishlist btn-expandable" onclick="addTowishlist('<%=product._id%>')"><span> Add to Wishlist</span></button>
+                                        
                                     </div><!-- End .product-action-vertical -->
                     
                                     <div class="product-action">
@@ -119,7 +118,7 @@
                                         <div class="ratings">
                                             <div class="ratings-val" style="width: 0%;"></div><!-- End .ratings-val -->
                                         </div><!-- End .ratings -->
-                                        <span class="ratings-text">( 0 Reviews )</span>
+                                        
                                     </div><!-- End .rating-container -->
                     
                                     <!-- End .product-nav -->
@@ -356,6 +355,21 @@
                 }
             })
         }
+
+
+        function addTowishlist(proId){
+        $.ajax({
+            url:"/addto-wishlist/"+proId,
+            method:'get',
+            success:(response)=>{
+                if (response.status === "added") {
+                    new swal("Product added to whishlist", "", "success");
+        } else {
+            new swal("Product already added to whishlist", "", "warning");
+        }
+            }
+        })
+    }
 
 
 

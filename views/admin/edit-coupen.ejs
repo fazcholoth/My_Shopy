@@ -1,0 +1,56 @@
+<%-include('../partials/adminheader')-%>
+
+<div class="main-wrap">
+  <h1 class="text-center">Coupons</h1>
+  <div class="row">
+    <div class="col-md-3">
+      <form action="/admin/edit-coupen/<%=coupen._id%>" method="POST">
+        <div class="form-group">
+          <label for="coupon-title">Coupon title</label>
+          <input
+            type="text"
+            class="form-control"
+            id="coupon-title"
+            placeholder="Enter coupon title"
+            name="title"
+            value="<%=coupen.coupentitle%>"
+          />
+        </div>
+        <div class="form-group">
+          <label for="discount-amount">Discount Amount</label>
+          <input
+            type="number"
+            class="form-control"
+            id="coupon-discount"
+            placeholder="Discount Amount "
+            name="discount"
+            value="<%=coupen.discount%>"
+          />
+        </div>
+        <div class="form-group">
+          <label for="coupon-code">Coupon code</label>
+          <input
+            type="text"
+            class="form-control"
+            id="coupon-code"
+            placeholder="Enter coupon code"
+            name="coupencode"
+            value="<%=coupen.coupencode%>"
+          />
+        </div>
+        <div class="form-group">
+          <label for="coupon-expiry">Coupon expiry date</label>
+          <input
+            type="date"
+            class="form-control"
+            id="coupon-expiry"
+            name="expirydate"
+            value="<%=coupen.expirydate%>"
+          />
+        </div>
+        <button type="submit" class="btn btn-primary">Edit coupon</button>
+      </form>
+    </div>
+    
+  </div>
+</div>

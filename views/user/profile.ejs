@@ -10,8 +10,8 @@
     <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
         <div class="container">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/">Shop</a></li>
                 <li class="breadcrumb-item active" aria-current="page">My Account</li>
             </ol>
         </div><!-- End .container -->
@@ -39,7 +39,10 @@
                                 <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account" role="tab" aria-controls="tab-account" aria-selected="false">Account Details</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Sign Out</a>
+                              <a class="nav-link" id="tab-wallet-link" data-toggle="tab" href="#tab-wallet" role="tab" aria-controls="tab-wallet" aria-selected="false">My Wallet</a>
+                           </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/logout">Sign Out</a>
                             </li>
                         </ul>
                     </aside><!-- End .col-lg-3 -->
@@ -47,7 +50,7 @@
                     <div class="col-md-8 col-lg-9">
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
-                                <p>Hello <span class="font-weight-normal text-dark"><%= user.name %></span> (not <%= user.name %>? <a href="#">Log out</a>)</p>
+                                <p>Hello <span class="font-weight-normal text-dark"><%= user.name %></span> (not <%= user.name %>? <a href="/logout">Log out</a>)</p>
                                 <p>From your account dashboard you can:</p>
                                 <ul>
                                   <li>View your <a href="#tab-orders" class="tab-trigger-link link-underline">recent orders</a></li>
@@ -57,7 +60,7 @@
                               </div>
                               <!-- .End .tab-pane -->
                             <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
-                                <p>Hello <span class="font-weight-normal text-dark">User</span> (not <span class="font-weight-normal text-dark">User</span>? <a href="#">Log out</a>) 
+                                <p>Hello <span class="font-weight-normal text-dark">User</span> (not <span class="font-weight-normal text-dark"><%= user.name %></span>? <a href="/logout">Log out</a>) 
                                 <br>
                                 From your account dashboard you can view your <a href="#tab-orders" class="tab-trigger-link link-underline">recent orders</a>, manage your <a href="#tab-address" class="tab-trigger-link">shipping and billing addresses</a>, and <a href="#tab-account" class="tab-trigger-link">edit your password and account details</a>.</p>
                             </div>
@@ -86,7 +89,7 @@
                                   </table>
                                 <% } else { %>
                                   <p>No order has been made yet.</p>
-                                  <a href="category.html" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
+                                  <a href="/" class="btn btn-outline-primary-2"><span>GO SHOP</span><i class="icon-long-arrow-right"></i></a>
                                 <% } %>
                               </div>
                               <!-- .End .tab-pane -->
@@ -153,12 +156,16 @@
                                                 Country :<%=addresses.country%><br>
                                                 Phone : <%=addresses.phone%><br>
                                                 Zipcode :<%=addresses.zipCode%><br>
-                                                <a href="/edit-address/<%=addresses._id%>">Edit <i class="icon-edit"></i></a></p>
+                                                <a href="/edit-address/<%=addresses._id%>?page='profilepage'">Edit <i class="icon-edit"></i></a>
+                                                <a href="/delete-address/<%=addresses._id%>?page='profilepage'">Delete <i class="icon-edit"></i></a></p>
+                                                <% }); %>
+                                                <a href="/add-address?page='profilepage'" class="btn btn-outline-primary-2"><span>Add Address</span><i class="icon-long-arrow-right"></i></a>
                                             </div><!-- End .card-body -->
-                                            <% }); %>
+                                            
+
                                             <% } else { %>
                                                 <p>No addrress available yet.</p>
-                                                <a href="/add-address" class="btn btn-outline-primary-2"><span>Add Address</span><i class="icon-long-arrow-right"></i></a>
+                                                <a href="/add-address?page='profilepage'" class="btn btn-outline-primary-2"><span>Add Address</span><i class="icon-long-arrow-right"></i></a>
                                               <% } %>
                                         </div><!-- End .card-dashboard -->
                                     </div><!-- End .col-lg-6 -->
@@ -168,41 +175,46 @@
                             </div><!-- .End .tab-pane -->
 
                             <div class="tab-pane fade" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
-                                <form action="#">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <label>First Name *</label>
-                                            <input type="text" class="form-control" required>
-                                        </div><!-- End .col-sm-6 -->
-
-                                        <div class="col-sm-6">
-                                            <label>Last Name *</label>
-                                            <input type="text" class="form-control" required>
-                                        </div><!-- End .col-sm-6 -->
-                                    </div><!-- End .row -->
+                                <form action="/changeprofile" method="post">
+                                    
 
                                     <label>Display Name *</label>
-                                    <input type="text" class="form-control" required>
+                                    <input type="text" class="form-control" required value="<%=user.name%>" name="name">
                                     <small class="form-text">This will be how your name will be displayed in the account section and in reviews</small>
 
                                     <label>Email address *</label>
-                                    <input type="email" class="form-control" required>
+                                    <input type="email" class="form-control" required value="<%=user.email%>" name="email">
 
-                                    <label>Current password (leave blank to leave unchanged)</label>
-                                    <input type="password" class="form-control">
+                                    <label>Current password</label>
+                                    <input type="password" class="form-control" value="<%=user.password%>" name="currentpassword">
 
                                     <label>New password (leave blank to leave unchanged)</label>
-                                    <input type="password" class="form-control">
+                                    <input type="password" class="form-control" name="newpassword">
 
-                                    <label>Confirm new password</label>
-                                    <input type="password" class="form-control mb-2">
+                                    
 
                                     <button type="submit" class="btn btn-outline-primary-2">
                                         <span>SAVE CHANGES</span>
                                         <i class="icon-long-arrow-right"></i>
                                     </button>
                                 </form>
-                            </div><!-- .End .tab-pane -->
+                            </div>
+                            <div class="tab-pane fade" id="tab-wallet" role="tabpanel" aria-labelledby="tab-wallet-link">
+                              <p>Your Wallet Balance.</p>
+
+                              <div class="row">
+                                  <div class="col-lg-6">
+                                      <div class="card card-dashboard">
+                                           
+                                          <div class="card-body">
+                                            <h4><%=wallet%></h4>
+                                          </div> 
+                                      </div><!-- End .card-dashboard -->
+                                  </div><!-- End .col-lg-6 -->
+
+                                  
+                              </div><!-- End .row -->
+                          </div><!-- .End .tab-pane -->
                         </div>
                     </div><!-- End .col-lg-9 -->
                 </div><!-- End .row -->

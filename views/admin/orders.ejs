@@ -20,7 +20,7 @@
               <% orders.forEach(function(order, index) { %>
               <tr>
                 <td><%= order._id %></td>
-                <td><%= order.userId._id %></td>
+                <td><%= order.userId.name %></td>
                 <td><%= order.orderDate %></td>
                 <td><%= order.paymentmethod %></td>
                 <td><%= order.paymentstatus %></td>
@@ -38,7 +38,7 @@
                         
                     <% } %> 
                     <% if (order.status === "returned"&&order.paymentstatus==="paid") { %>
-                        <button class="btn btn-danger btn-sm" onclick="approveReturn('<%=order.userId._id%>','<%=order.total%>')">Approve</button>
+                        <button class="btn btn-danger btn-sm" onclick="approveReturn('<%=order.userId._id%>','<%=order.total%>','<%=order._id%>')">Approve</button>
                         <% } %> 
                         
                   </td>
@@ -73,7 +73,7 @@
         },
         method: 'post',
         success: (response) => {
-            alert("order cancelled")
+            
             location.reload()
         }
       });
@@ -89,7 +89,7 @@
         },
         method: 'post',
         success: (response) => {
-            alert("order shipped")
+           
             location.reload()
         }
       });
@@ -103,24 +103,24 @@
         },
         method: 'post',
         success: (response) => {
-            alert("order delivered")
+            
             location.reload()
         }
       });
     }
 
-    function approveReturn(userId,total) {
-      console.log('jjjjj');
+    function approveReturn(userId,total,orderId) {
       total=parseInt(total)
       $.ajax({
         url: '/admin/approve-return',
         data: {
           userId:userId,
-          amount:total
+          amount:total,
+          orderId:orderId
         },
         method: 'post',
         success: (response) => {
-            alert("return approved")
+           
             location.reload()
         }
       });

@@ -44,14 +44,15 @@
             />
           </div>
         </div>
-
+        
+          <p style="color: red;"><%=Error%></p>
+           
         <div class="card">
           <div class="card-body">
             <div class="row">
+              
               <div class="col-md-3">
-               
-               
-
+                
                 <form action="/admin/add-category" method="POST">
                   <div class="mb-3">
                     <label for="category_name" class="form-label"
@@ -104,6 +105,7 @@
                         <th>Name</th>
                         <th>Description</th>
                         <th>Discount</th>
+                        <th>Status</th>
                         <th class="text-end">Action</th>
                       </tr>
                     </thead>
@@ -112,9 +114,19 @@
                       <tr>
                         <td><%= index + 1 %></td>
                         <td><b><%= cat.Categoryname %></b></td>
-                        <td></td>
+                        <td><%= cat.Description %></td>
                         <td><%=cat.offer%></td>
+                        <td>
+                          <% if (cat.listed) { %>
+                            <span class="badge rounded-pill bg-success">Active</span>
+                            
+                          <% } else { %>
+                            <span class="badge rounded-pill bg-danger">unlisted</span>
+                          <% } %>
+                        </td>
+                        
                         <td class="text-end">
+                          <% if (cat.listed) { %>
                           <div class="dropdown">
                             <a
                               href="#"
@@ -124,21 +136,33 @@
                               <i class="material-icons md-more_horiz"></i>
                             </a>
                             <div class="dropdown-menu">
-                              <a class="dropdown-item" href="#">View detail</a>
-                              <a class="dropdown-item" href="#">Edit info</a>
-                              <a
-                                class="dropdown-item text-danger"
-                                href="/admin/delete_category/<%= cat._id %>"
-                                >Delete</a
-                              >
+                              <a class="dropdown-item" href="/admin/edit_category/<%= cat._id %>">Edit info</a>
+                              <button  class="dropdown-item text-danger" onclick="confirmremoveItem('<%= cat._id %>')">Delete</button>
+                                
+                               
+
                             </div>
+                            <% } else { %>
+                              <a
+                              href="#"
+                              data-bs-toggle="dropdown"
+                              class="btn btn-light rounded btn-sm font-sm"
+                            >
+                              <i class="material-icons md-more_horiz"></i>
+                            </a>
+                            <div class="dropdown-menu">
+                              <a class="dropdown-item" href="/admin/list-category/<%= cat._id %>">list</a>
+                              
+                            </div>
+                            <% } %>
                           </div>
-                         
+                          
                         </td>
                       </tr>
                       <% })%>
                     </tbody>
                   </table>
+
                 </div>
               </div>
              
@@ -168,3 +192,29 @@
 
   <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-categories.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:21 GMT -->
 </html>
+
+
+<link
+  rel="stylesheet"
+  href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css"
+/>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+
+<script>
+  function confirmremoveItem(catId) {
+  new swal({
+    title: 'Do you want to proceed?',
+    icon: 'warning',
+    showCancelButton: true,
+    showConfirmButton: true,
+    confirmButtonText: 'Yes'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // Redirect to the delete route after user confirms the action
+      window.location.href = `/admin/delete_category/${catId}`;
+    } else if (result.dismiss === swal.DismissReason.cancel) {
+      new swal("Category not Removed", "", "info");
+    }
+  });
+}
+</script>

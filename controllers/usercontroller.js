@@ -25,6 +25,7 @@ module.exports = {
   },
   postSignup: (req, res) => {
     userhelper.doSignup(req.body).then((response) => {
+      console.log(response);
       req.session.user = response;
       req.session.loggedIn = true;
       res.redirect("/");
@@ -176,20 +177,25 @@ module.exports = {
       req.body,
       req.body.total
     );
-    if (orderId.status) {
-      res.json({ product: orderId.item, balance: orderId.balance });
-    } else {
-      if (req.body.paymentmethod === "cash-on-delivery") {
-        res.json({ codsuccess: true });
+    if(orderId){
+      if (orderId.status) {
+        res.json({ product: orderId.item, balance: orderId.balance });
       } else {
-        const response = await userhelper.generateRazorpay(
-          orderId,
-          req.body.total
-        );
-        console.log(response);
-        res.json(response);
+        if (req.body.paymentmethod === "cash-on-delivery"||req.body.paymentmethod === "wallet") {
+          res.json({ codsuccess: true });
+        } else {
+          const response = await userhelper.generateRazorpay(
+            orderId,
+            req.body.total
+          );
+          console.log(response);
+          res.json(response);
+        }
       }
+    }else{
+      res.json({wallet:true})
     }
+   
   },
   orderSuccess: async (req, res) => {
     let user = req.session.user;
@@ -258,12 +264,25 @@ module.exports = {
       cartcount = await userhelper.getCartcount(req.session.user._id);
     }
     const categories = await listedCategories();
-    res.render("user/add-address", { user, cartcount, categories });
+    let Page=null
+    if(req.query.page){
+    Page ='profile'
+      res.render("user/add-address", { user, cartcount, categories,Page })
+    }else{
+      res.render("user/add-address", { user, cartcount, categories,Page });
+    }
+   
   },
   postaddAddress: async (req, res) => {
     let users = req.session.user;
     await userhelper.postaddAddress(req.body, users);
-    res.redirect("/check-out")
+    if(req.query.page){
+      res.redirect("/view-profile")
+    }else{
+      res.redirect("/check-out")
+    }
+    
+    
   },
   viewOrders: async (req, res) => {
     let user = req.session.user;
@@ -322,11 +341,17 @@ module.exports = {
     let userId = user._id;
     let coupencode = req.body.couponcode;
     var { subtotal } = await userhelper.getCart(userId);
-    var { total, discount } = await userhelper.applyCoupen(
+    let coupen = await userhelper.applyCoupen(
       coupencode,
-      subtotal
+      subtotal,user._id
     );
-    res.json({ discount: discount, total: total });
+    if(coupen){
+      var { total, discount } = coupen
+      res.json({ discount: discount, total: total });
+    }else{
+      res.json({used:'used'})
+    }
+    
   },
   viewCoupen: async (req, res) => {
     let user = req.session.user;
@@ -347,7 +372,7 @@ module.exports = {
     const categories = await listedCategories();
     const products = await userhelper.searchProducts(req.body.searchword);
     console.log(products);
-    res.render("user/category", { products, cartcount, user, categories });
+    res.render("user/search", { products, cartcount, user, categories });
   },
   resendOtp: async (req, res) => {
     let user = req.session.user;
@@ -387,18 +412,35 @@ module.exports = {
     }
     const categories = await listedCategories();
     let address = await userhelper.showeditAddress(addressId);
-    res.render("user/editaddress", { user, cartcount, categories, address });
+    let Page =null
+    if(req.query.page){
+      Page='profilepage'
+      res.render("user/editaddress", { user, cartcount, categories, address,Page });
+    }else{
+      res.render("user/editaddress", { user, cartcount, categories, address,Page });
+    }
+    
   },
   deleteAddress: async (req, res) => {
     let addressId = req.params.addressId;
     await userhelper.deleteAddress(addressId);
-    res.redirect("/check-Out");
+    if(req.query.page){
+      res.redirect("/view-profile")
+    }else{
+      res.redirect("/check-Out");
+    }
+   
   },
   posteditAddress: async (req, res) => {
     let addressId = req.params.addressId;
     let userId = req.session.user._id;
     await userhelper.posteditAddress(addressId, req.body, userId);
-    res.redirect("/check-Out");
+    if(req.query.page){
+      res.redirect("/view-profile");
+    }else{
+      res.redirect("/check-Out");
+    }
+    
   },
   viewProfile: async (req, res) => {
     let user = req.session.user;
@@ -409,10 +451,15 @@ module.exports = {
     const categories = await listedCategories();
     const orders = await userhelper.viewOrders(user._id);
     const cart = await userhelper.getCart(user._id);
+    let wallet = await userhelper.findbalance(user._id)
+    if(wallet){
+      wallet=wallet.balance
+    }else{
+      wallet=0
+    }
     const { product, subtotal, cartId } = cart;
     const addresses = await userhelper.findAddress(user._id);
-    console.log(addresses);
-    res.render("user/profile", { user, cartcount, categories ,orders,product,subtotal,addresses});
+    res.render("user/profile", { user, cartcount, categories ,orders,product,subtotal,addresses,wallet});
   },
   viewallProducts: async (req, res) => {
     let user = req.session.user;
@@ -483,11 +530,16 @@ module.exports = {
     }
     const categories = await listedCategories();
     const products = await userhelper.viewWishlist(user._id)
-    res.render("user/validation", {
+    res.render("user/whishlist", {
       products,
       cartcount,
       user,
       categories,
     })
+  },
+  changeProfile:async(req,res)=>{
+    let user = req.session.user;
+    await userhelper.changeProfile(user._id,req.body)
+    res.redirect("view-profile")
   }
 };

@@ -1,0 +1,173 @@
+
+
+<%-include('../partials/userheader')-%>
+<div class="page-content">
+    <div class="container">
+      <div class="products">
+        <div class="row">
+            <% if (products.length > 0) { %>
+          <% products.forEach(function(product) { %>
+          <div class="col-6 col-md-4 col-lg-4 col-xl-3">
+            <div class="product product-7 text-center">
+              <figure class="product-media">
+                <a href="/product-detail/<%= product._id %>">
+                  <img
+                    src="<%= product.image[0] %>"
+                    alt="Product image"
+                    class="product-image"
+                  />
+                </a>
+
+                <div class="product-action-vertical">
+                  <button class="btn-product-icon btn-wishlist btn-expandable" onclick="addTowishlist('<%=product._id%>')"><span> Add to Wishlist</span></button>
+                  </div>
+                 
+                <!-- End .product-action-vertical -->
+
+                <div class="product-action">
+                  <button
+                    class="btn-product btn-cart"
+                    onclick="addTocart('<%= product._id %>')"
+                  >
+                    <span>add to cart</span>
+                  </button>
+                </div>
+                <!-- End .product-action -->
+              </figure>
+              <!-- End .product-media -->
+
+              <div
+                class="product-body"
+                style="background-color: rgb(250, 212, 228)"
+              >
+                <div class="product-cat">
+                  <a href="#"><%= product.category %></a>
+                </div>
+                <!-- End .product-cat -->
+                <h3 class="product-title">
+                  <a href="/product-detail/<%= product._id %>"
+                    ><%= product.name %></a
+                  >
+                </h3>
+                <!-- End .product-title -->
+                <% if (product.Firstprice==0) { %>
+
+                <div class="product-price">
+                  <p><%= product.Price %></p>
+                </div>
+                <% } else { %>
+                <div class="product-price">
+                  <p>
+                    <span style="text-decoration: line-through"
+                      ><%= product.Firstprice %></span
+                    >
+                    Discount Rate <%= product.Price %>
+                  </p>
+                </div>
+
+                <% } %>
+                <!-- End .product-price -->
+                <div class="ratings-container">
+                  <div class="ratings">
+                    <div class="ratings-val" style="width: 0%"></div>
+                    <!-- End .ratings-val -->
+                  </div>
+                  <!-- End .ratings -->
+                 
+                </div>
+                <!-- End .rating-container -->
+
+                <!-- End .product-nav -->
+              </div>
+              <!-- End .product-body -->
+            </div>
+            <!-- End .product -->
+          </div>
+          <!-- End .col-6 col-md-4 col-lg-4 col-xl-3 -->
+          <% }); %>
+          <% } else { %>
+           <h3>You Have No Whishlist</h3>
+          <% } %>
+
+        </div>
+        <!-- End .row -->
+
+        <div class="more-container text-center mt-2">
+          <a href="#" class="btn btn-outline-dark-2 btn-more"
+            ><span>show more</span></a
+          >
+          
+        </div>
+        <!-- End .load-more-container -->
+      </div>
+      <!-- End .products -->
+    </div>
+    <!-- End .container -->
+  </div>
+
+
+  
+
+  
+  <!-- End .main -->
+  <%-include('../partials/userfooter')-%>
+  
+  <script src="../../assets/js/jquery.min.js"></script>
+  <script src="../../assets/js/bootstrap.bundle.min.js"></script>
+  <script src="../../assets/js/jquery.hoverIntent.min.js"></script>
+  <script src="../../assets/js/jquery.waypoints.min.js"></script>
+  <script src="../../assets/js/superfish.min.js"></script>
+  <script src="../../assets/js/owl.carousel.min.js"></script>
+  <script src="../../assets/js/bootstrap-input-spinner.js"></script>
+  <script src="../../assets/js/jquery.elevateZoom.min.js"></script>
+  <script src="../../assets/js/bootstrap-input-spinner.js"></script>
+  <script src="../../assets/js/jquery.magnific-popup.min.js"></script>
+  <!-- Main JS File -->
+  
+  <script src="../../assets/main.js"></script>
+  
+  <!-- Add these links to your HTML file -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css"
+  />
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.js"></script>
+  
+  <script>
+    function addTocart(proId) {
+      $.ajax({
+        url: "/addto-cart/" + proId,
+        method: "get",
+        success: (response) => {
+          if (response.status == "non existing") {
+            let count = $("#cart-count").html();
+            count = parseInt(count) + 1;
+            $("#cart-count").html(count);
+          }
+          if (response.status === "existing") {
+            new swal("Product already added to cart", "", "warning");
+          } else if (response.status === "non existing") {
+            new swal("Product added to cart", "", "success");
+          } else if (response.status === "out of stock") {
+            new swal("Out of stock", "", "error");
+          }
+        },
+      });
+    }
+
+
+    function addTowishlist(proId){
+        $.ajax({
+            url:"/addto-wishlist/"+proId,
+            method:'get',
+            success:(response)=>{
+                if (response.status === "added") {
+                    new swal("Product added to whishlist", "", "success");
+        } else {
+            new swal("Product already added to whishlist", "", "warning");
+        }
+            }
+        })
+    }
+  </script>
+  

@@ -12,8 +12,8 @@
     <nav aria-label="breadcrumb" class="breadcrumb-nav">
         <div class="container">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/">Shop</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Checkout</li>
             </ol>
         </div><!-- End .container -->
@@ -29,6 +29,11 @@
                   <input type="text" style="width: 200px;" class="form-control" id="couponcode" name="couponcode" placeholder="Enter coupon code">
                 </div>
                 <button type="submit" style="width: 200px;" class="btn btn-primary">Apply Coupon</button>
+                <span
+                id="coupen-error"
+                class="validation"
+                style="color: red"
+              ></span>
               </form>
             
               <a href="/view-coupons" style="display: flex; align-items: center;">
@@ -137,11 +142,17 @@
                                     Cash on delivery
                                 </label>
                             </div>
-                          
-                    
-                           
-                    
-                            
+                            <div class="form-check">
+                              <input class="form-check-input" type="radio"  name="paymentmethod" id="payment-method-3" value="wallet" required>
+                              <label class="form-check-label" for="payment-method-4">
+                                  Wallet
+                              </label>
+                          </div>
+                          <span
+                          id="wallet-error"
+                          class="validation"
+                          style="color: red"
+                        ></span>                           
                         </div>
                     
                     <!-- End .card -->
@@ -183,10 +194,15 @@ $("#coupen-form").submit((e) => {
       method: 'POST',
       data: $('#coupen-form').serialize(),
       success: (response) => {
+        if(response.used){
+          document.getElementById("coupen-error").innerHTML =
+        "You have already used the coupen";
+        }else{
         document.getElementById('discount').innerHTML=response.discount
         document.getElementById('subtotal').innerHTML=response.total
         const total= document.getElementById('discounttotal')
         total.value=response.total
+        }
       },
       error: (error) => {
         console.log(error);
@@ -210,7 +226,10 @@ $("#coupen-form").submit((e) => {
       method: 'POST',
       data: $('#checkout-out-form').serialize(),
       success: (response) => {
-        if(response.product){
+        if(response.wallet){
+          document.getElementById("wallet-error").innerHTML =
+        "You have no balance";
+        }else if(response.product){
           alert(response.balance)
           alert(response.product)
         }else if(response.codsuccess){

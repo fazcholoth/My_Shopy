@@ -1,32 +1,32 @@
 const { ObjectId } = require("mongodb");
-const db = require("../models/model");
+const db = require("../utils/database");
 const bcrypt = require("bcrypt");
 var currentdate = new Date();
 var date = currentdate.toLocaleDateString();
 const year = 2022; // Replace with the desired year
-const moment = require('moment');
+const moment = require("moment");
 
 module.exports = {
   adminlogin: async (sort) => {
-    if (sort =="monthly"){
+    if (sort == "monthly") {
       const result = await db.order.aggregate([
         {
           $match: {
             orderDate: {
-              $gte: new Date(moment().subtract(1, 'months').startOf('month')),
-              $lt: new Date(moment().subtract(1, 'months').endOf('month'))
-            }
-          }
+              $gte: new Date(moment().subtract(1, "months").startOf("month")),
+              $lt: new Date(moment().subtract(1, "months").endOf("month")),
+            },
+          },
         },
         {
           $group: {
             _id: {
               year: { $year: "$orderDate" },
               month: { $month: "$orderDate" },
-              day: { $dayOfMonth: "$orderDate" }
+              day: { $dayOfMonth: "$orderDate" },
             },
-            count: { $sum: 1 }
-          }
+            count: { $sum: 1 },
+          },
         },
         {
           $group: {
@@ -36,10 +36,10 @@ module.exports = {
                 year: "$_id.year",
                 month: "$_id.month",
                 day: "$_id.day",
-                count: "$count"
-              }
-            }
-          }
+                count: "$count",
+              },
+            },
+          },
         },
         {
           $project: {
@@ -47,12 +47,15 @@ module.exports = {
             days: {
               $map: {
                 input: {
-                  $range: [1, moment().subtract(1, 'months').endOf('month').date()]
+                  $range: [
+                    1,
+                    moment().subtract(1, "months").endOf("month").date(),
+                  ],
                 },
                 as: "day",
                 in: {
-                  year: moment().subtract(1, 'months').year(),
-                  month: moment().subtract(1, 'months').month() + 1,
+                  year: moment().subtract(1, "months").year(),
+                  month: moment().subtract(1, "months").month() + 1,
                   day: "$$day",
                   count: {
                     $let: {
@@ -63,35 +66,44 @@ module.exports = {
                             as: "dayCount",
                             cond: {
                               $and: [
-                                { $eq: [ "$$dayCount.year", moment().subtract(1, 'months').year() ] },
-                                { $eq: [ "$$dayCount.month", moment().subtract(1, 'months').month() + 1 ] },
-                                { $eq: [ "$$dayCount.day", "$$day" ] }
-                              ]
-                            }
-                          }
-                        }
+                                {
+                                  $eq: [
+                                    "$$dayCount.year",
+                                    moment().subtract(1, "months").year(),
+                                  ],
+                                },
+                                {
+                                  $eq: [
+                                    "$$dayCount.month",
+                                    moment().subtract(1, "months").month() + 1,
+                                  ],
+                                },
+                                { $eq: ["$$dayCount.day", "$$day"] },
+                              ],
+                            },
+                          },
+                        },
                       },
                       in: {
                         $cond: {
-                          if: { $gt: [ { $size: "$$matchingDay" }, 0 ] },
-                          then: { $arrayElemAt: [ "$$matchingDay.count", 0 ] },
-                          else: 0
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
+                          if: { $gt: [{ $size: "$$matchingDay" }, 0] },
+                          then: { $arrayElemAt: ["$$matchingDay.count", 0] },
+                          else: 0,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       ]);
-      let period
+      let period;
       console.log(result[0].days);
-      let data = result[0].days
-      return {period:'monthly',data:data}
-      
-    }else{
+      let data = result[0].days;
+      return { period: "monthly", data: data };
+    } else {
       const result = await db.order.aggregate([
         {
           $match: {
@@ -178,11 +190,37 @@ module.exports = {
           },
         },
       ]);
-  let period
+
+      const totalDeliveredOrders = await db.order.aggregate([
+        {
+          $match: {
+            status: "delivered",
+          },
+        },
+        {
+          $group: {
+            _id: null,
+            total: {
+              $sum: "$total",
+            },
+          },
+        },
+      ]);
+      const Orders = await db.order.find()
+      const totalorders=Orders.length
+      const Products = await db.product.find()
+      const totalproducts=Products.length
+      let period;
       console.log(result);
-      return {period:"yearly",data:result}
+      const totalOfTotals = totalDeliveredOrders.length > 0 ? totalDeliveredOrders[0].total : 0;
+      return {
+        period: "yearly",
+        data: result,
+        total: totalOfTotals,
+        orders:totalorders,
+        products:totalproducts
+      };
     }
-   
   },
   addProduct: (productData, filename) => {
     console.log(productData);
@@ -233,7 +271,7 @@ module.exports = {
     });
   },
   deleteProduct: (productId) => {
-    var g
+    var g;
     console.log(productId);
     return new Promise(async (resolve, reject) => {
       await db.product
@@ -311,9 +349,11 @@ module.exports = {
   },
   deleteCategory: (Id) => {
     return new Promise(async (resolve, reject) => {
-      await db.category.deleteOne({ _id: Id }).then(() => {
-        resolve();
-      });
+      await db.category
+        .updateOne({ _id: Id }, { $set: { listed: false } })
+        .then(() => {
+          resolve();
+        });
     });
   },
   showeditProduct: (Id) => {
@@ -403,11 +443,10 @@ module.exports = {
     );
     return;
   },
-  approveReturn: async (userId, amount) => {
+  approveReturn: async (userId, amount, orderId) => {
     const total = parseInt(amount);
-    console.log(userId + "hhhhhhhhhhhhhhhhhhhhhhhhhhh");
     await db.order.updateOne(
-      { userId: userId },
+      { _id: orderId },
       { $set: { paymentstatus: "refunded" } }
     );
     const wallet = await db.wallet.findOne({ userId: userId });
@@ -465,20 +504,64 @@ module.exports = {
             orderDate: {
               $gte: fromDate,
               $lte: toDate,
-            }, status: "delivered" 
+            },
+            status: "delivered",
           })
-          .populate("userId").exec()
-      
+          .populate("userId")
+          .exec();
+
         console.log(orders);
         return orders;
       } else {
-        const Orders = await db.order.find({ status: "delivered" }).populate("userId");
+        const Orders = await db.order
+          .find({ status: "delivered" })
+          .populate("userId");
         return Orders;
       }
     } catch (err) {
       console.error(err);
       throw new Error("Error finding orders.");
     }
-    
+  },
+  showEditcategory: async (catId) => {
+    const catdata = await db.category.findOne({ _id: catId });
+    return catdata;
+  },
+  postEditcategory: async (catId, catdata) => {
+    await db.category.updateOne(
+      { _id: catId },
+      {
+        $set: {
+          Categoryname: catdata.categoryname,
+          Description: catdata.categorydescription,
+          offer: catdata.categorydiscount,
+        },
+      }
+    );
+    return;
+  },
+  listCategory: async (catId) => {
+    await db.category.updateOne({ _id: catId }, { $set: { listed: true } });
+    return;
+  },
+  editCoupen: async (coupenId) => {
+    let Coupen = await db.coupen.findOne({ _id: coupenId });
+    return Coupen;
+  },
+  posteditCoupen: async (editeddata, coupenId) => {
+    const updateObj = {
+      coupencode: editeddata.coupencode,
+      discount: editeddata.discount,
+      coupentitle: editeddata.title,
+    };
+    if (editeddata.expirydate) {
+      updateObj.expirydate = editeddata.expirydate;
+    }
+    await db.coupen.updateOne({ _id: coupenId }, { $set: updateObj });
+    return;
+  },
+  deleteCoupen: async (coupenId) => {
+    let Coupen = await db.coupen.deleteOne({ _id: coupenId });
+    return;
   },
 };
