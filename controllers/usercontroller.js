@@ -6,7 +6,6 @@ var userhelper = require("../helpers/userhelper");
 const twilio = require("../utils/twilio");
 const path = require("path");
 
-
 module.exports = {
   getHome: async (req, res) => {
     let user = req.session.user;
@@ -14,11 +13,20 @@ module.exports = {
     if (req.session.user) {
       cartcount = await userhelper.getCartcount(req.session.user._id);
     }
-     const categories = await listedCategories();
-    userhelper.getHome(req.query.page).then(({prodata,currentpage,totalpages}) => {
-      console.log(totalpages);
-      res.render("user/userhome", { user, prodata,currentpage,totalpages,cartcount,categories });
-    });
+    const categories = await listedCategories();
+    userhelper
+      .getHome(req.query.page)
+      .then(({ prodata, currentpage, totalpages }) => {
+        console.log(totalpages);
+        res.render("user/userhome", {
+          user,
+          prodata,
+          currentpage,
+          totalpages,
+          cartcount,
+          categories,
+        });
+      });
   },
   showSignup: (req, res) => {
     res.render("user/usersignup");
@@ -163,10 +171,19 @@ module.exports = {
       cartcount = await userhelper.getCartcount(req.session.user._id);
     }
     const categories = await listedCategories();
-    userhelper.categoryView(req.params.category,req.query.page).then(({products,totalpages,currentpage}) => {
-      console.log(totalpages);
-      res.render("user/category", { products,totalpages,currentpage,cartcount, user, categories });
-    });
+    userhelper
+      .categoryView(req.params.category, req.query.page)
+      .then(({ products, totalpages, currentpage }) => {
+        console.log(totalpages);
+        res.render("user/category", {
+          products,
+          totalpages,
+          currentpage,
+          cartcount,
+          user,
+          categories,
+        });
+      });
   },
   placeOrder: async (req, res) => {
     let user = req.session.user;
@@ -177,11 +194,14 @@ module.exports = {
       req.body,
       req.body.total
     );
-    if(orderId){
+    if (orderId) {
       if (orderId.status) {
         res.json({ product: orderId.item, balance: orderId.balance });
       } else {
-        if (req.body.paymentmethod === "cash-on-delivery"||req.body.paymentmethod === "wallet") {
+        if (
+          req.body.paymentmethod === "cash-on-delivery" ||
+          req.body.paymentmethod === "wallet"
+        ) {
           res.json({ codsuccess: true });
         } else {
           const response = await userhelper.generateRazorpay(
@@ -192,10 +212,9 @@ module.exports = {
           res.json(response);
         }
       }
-    }else{
-      res.json({wallet:true})
+    } else {
+      res.json({ wallet: true });
     }
-   
   },
   orderSuccess: async (req, res) => {
     let user = req.session.user;
@@ -264,25 +283,22 @@ module.exports = {
       cartcount = await userhelper.getCartcount(req.session.user._id);
     }
     const categories = await listedCategories();
-    let Page=null
-    if(req.query.page){
-    Page ='profile'
-      res.render("user/add-address", { user, cartcount, categories,Page })
-    }else{
-      res.render("user/add-address", { user, cartcount, categories,Page });
+    let Page = null;
+    if (req.query.page) {
+      Page = "profile";
+      res.render("user/add-address", { user, cartcount, categories, Page });
+    } else {
+      res.render("user/add-address", { user, cartcount, categories, Page });
     }
-   
   },
   postaddAddress: async (req, res) => {
     let users = req.session.user;
     await userhelper.postaddAddress(req.body, users);
-    if(req.query.page){
-      res.redirect("/view-profile")
-    }else{
-      res.redirect("/check-out")
+    if (req.query.page) {
+      res.redirect("/view-profile");
+    } else {
+      res.redirect("/check-out");
     }
-    
-    
   },
   viewOrders: async (req, res) => {
     let user = req.session.user;
@@ -291,7 +307,21 @@ module.exports = {
       cartcount = await userhelper.getCartcount(req.session.user._id);
     }
     const categories = await listedCategories();
-    const orders = await userhelper.viewOrders(user._id);
+    const Orders = await userhelper.viewOrders(user._id);
+
+    const orders = Orders.map((order) => {
+      const options = {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+      };
+      const updatedOrder = {
+        ...order._doc,
+        orderDate: order.orderDate.toLocaleDateString("en-US", options),
+      };
+      return updatedOrder;
+    });
+
     res.render("user/view-orders", { user, cartcount, categories, orders });
   },
   viewOrderdetails: async (req, res) => {
@@ -324,16 +354,16 @@ module.exports = {
       .catch((err) => {
         console.log(err);
         res.json({ status: false });
-      }); 
+      });
   },
   cancelOrder: async (req, res) => {
     const orderId = req.body.orderId;
-    await userhelper.cancelOrder(orderId,req.body.reason);
+    await userhelper.cancelOrder(orderId, req.body.reason);
     res.json({ status: true });
   },
   returnOrder: async (req, res) => {
     const orderId = req.body.orderId;
-    await userhelper.returnOrder(orderId,req.body.reason);
+    await userhelper.returnOrder(orderId, req.body.reason);
     res.json({ status: true });
   },
   applyCoupen: async (req, res) => {
@@ -341,17 +371,13 @@ module.exports = {
     let userId = user._id;
     let coupencode = req.body.couponcode;
     var { subtotal } = await userhelper.getCart(userId);
-    let coupen = await userhelper.applyCoupen(
-      coupencode,
-      subtotal,user._id
-    );
-    if(coupen){
-      var { total, discount } = coupen
+    let coupen = await userhelper.applyCoupen(coupencode, subtotal, user._id);
+    if (coupen) {
+      var { total, discount } = coupen;
       res.json({ discount: discount, total: total });
-    }else{
-      res.json({used:'used'})
+    } else {
+      res.json({ used: "used" });
     }
-    
   },
   viewCoupen: async (req, res) => {
     let user = req.session.user;
@@ -412,35 +438,44 @@ module.exports = {
     }
     const categories = await listedCategories();
     let address = await userhelper.showeditAddress(addressId);
-    let Page =null
-    if(req.query.page){
-      Page='profilepage'
-      res.render("user/editaddress", { user, cartcount, categories, address,Page });
-    }else{
-      res.render("user/editaddress", { user, cartcount, categories, address,Page });
+    let Page = null;
+    if (req.query.page) {
+      Page = "profilepage";
+      res.render("user/editaddress", {
+        user,
+        cartcount,
+        categories,
+        address,
+        Page,
+      });
+    } else {
+      res.render("user/editaddress", {
+        user,
+        cartcount,
+        categories,
+        address,
+        Page,
+      });
     }
-    
   },
   deleteAddress: async (req, res) => {
     let addressId = req.params.addressId;
     await userhelper.deleteAddress(addressId);
-    if(req.query.page){
-      res.redirect("/view-profile")
-    }else{
+    if (req.query.page) {
+      res.redirect("/view-profile");
+    } else {
       res.redirect("/check-Out");
     }
-   
   },
   posteditAddress: async (req, res) => {
     let addressId = req.params.addressId;
     let userId = req.session.user._id;
     await userhelper.posteditAddress(addressId, req.body, userId);
-    if(req.query.page){
+    if (req.query.page) {
       res.redirect("/view-profile");
-    }else{
+    } else {
       res.redirect("/check-Out");
     }
-    
   },
   viewProfile: async (req, res) => {
     let user = req.session.user;
@@ -451,15 +486,24 @@ module.exports = {
     const categories = await listedCategories();
     const orders = await userhelper.viewOrders(user._id);
     const cart = await userhelper.getCart(user._id);
-    let wallet = await userhelper.findbalance(user._id)
-    if(wallet){
-      wallet=wallet.balance
-    }else{
-      wallet=0
+    let wallet = await userhelper.findbalance(user._id);
+    if (wallet) {
+      wallet = wallet.balance;
+    } else {
+      wallet = 0;
     }
     const { product, subtotal, cartId } = cart;
     const addresses = await userhelper.findAddress(user._id);
-    res.render("user/profile", { user, cartcount, categories ,orders,product,subtotal,addresses,wallet});
+    res.render("user/profile", {
+      user,
+      cartcount,
+      categories,
+      orders,
+      product,
+      subtotal,
+      addresses,
+      wallet,
+    });
   },
   viewallProducts: async (req, res) => {
     let user = req.session.user;
@@ -471,75 +515,76 @@ module.exports = {
     const { color, category, brand, sort } = req.query;
     if (color || category || brand) {
       req.session.filter = req.query;
-      userhelper.viewallProducts(req.session.filter, req.session.sort,req.query.page)
+      userhelper
+        .viewallProducts(req.session.filter, req.session.sort, req.query.page)
 
-        .then(({currentpage,totalpages,products}) => {
+        .then(({ currentpage, totalpages, products }) => {
           res.render("user/allproducts", {
             products,
             cartcount,
             user,
             categories,
             totalpages,
-            currentpage
+            currentpage,
           });
         });
-    } else if(sort){
-    
-      
+    } else if (sort) {
       req.session.sort = req.query.sort;
-      userhelper.viewallProducts(req.session.filter, req.session.sort,req.query.page)
+      userhelper
+        .viewallProducts(req.session.filter, req.session.sort, req.query.page)
 
-        .then(({currentpage,totalpages,products}) => {
+        .then(({ currentpage, totalpages, products }) => {
           res.render("user/allproducts", {
             products,
             cartcount,
             user,
             categories,
             totalpages,
-            currentpage
+            currentpage,
           });
         });
-    }else{
-      userhelper.viewallProducts(req.session.filter, req.session.sort,req.query.page)
-        .then(({currentpage,totalpages,products}) => {
+    } else {
+      userhelper
+        .viewallProducts(req.session.filter, req.session.sort, req.query.page)
+        .then(({ currentpage, totalpages, products }) => {
           res.render("user/allproducts", {
             products,
             cartcount,
             user,
             categories,
             totalpages,
-            currentpage
+            currentpage,
           });
         });
     }
   },
-  addtoWishlist:async(req,res)=>{
+  addtoWishlist: async (req, res) => {
     let userId = req.session.user._id;
     let status = await userhelper.addtoWishlist(userId, req.params.id);
-    if (status=="added"){
-      res.json({status:"added"})
-    }else{
-      res.json({status:"already added"})
+    if (status == "added") {
+      res.json({ status: "added" });
+    } else {
+      res.json({ status: "already added" });
     }
   },
-  viewWishlist:async(req,res)=>{
+  viewWishlist: async (req, res) => {
     let user = req.session.user;
     let cartcount = null;
     if (req.session.user) {
       cartcount = await userhelper.getCartcount(req.session.user._id);
     }
     const categories = await listedCategories();
-    const products = await userhelper.viewWishlist(user._id)
+    const products = await userhelper.viewWishlist(user._id);
     res.render("user/whishlist", {
       products,
       cartcount,
       user,
       categories,
-    })
+    });
   },
-  changeProfile:async(req,res)=>{
+  changeProfile: async (req, res) => {
     let user = req.session.user;
-    await userhelper.changeProfile(user._id,req.body)
-    res.redirect("view-profile")
-  }
+    await userhelper.changeProfile(user._id, req.body);
+    res.redirect("view-profile");
+  },
 };

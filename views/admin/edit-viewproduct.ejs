@@ -47,13 +47,15 @@
                                 <div class="col-md-9">
                                     <div class="mb-4">
                                         <form action="/admin/edit-product/<%=productdata._id%>"
-                                         method="POST"  enctype="multipart/form-data">
+                                         method="POST"  enctype="multipart/form-data"   id="addproduct">
                                         <label class="form-label">Product title</label>
                                         <input type="text" placeholder="Type here" name="name" class="form-control" value="<%=productdata.Productname%>">
+                                        <span id="nameError" class="validation" style="color: red;"></span>
                                     </div>
                                     <div class="mb-4">
                                         <label class="form-label">Description</label>
-                                        <textarea type="text" placeholder="Type here" name="description" class="form-control" value="<%=productdata.ProductDescription%> rows="4"></textarea>
+                                        <textarea type="text" placeholder="Type here" name="description" class="form-control"  rows="4"><%=productdata.ProductDescription%></textarea>
+                                        <span id="descriptionError" class="validation" style="color: red;"></span>
                                     </div>
                                     
                                 </div> <!-- col.// -->
@@ -66,7 +68,7 @@
                                 <div class="col-md-9">
                                     <div class="mb-4">
                                         <label class="form-label">available quantity</label>
-                                        <input type="text" placeholder="quantity" name="quantity" class="form-control" value="<%=productdata.Quantity%>">
+                                        <input type="number" placeholder="quantity" name="quantity" class="form-control" value="<%=productdata.Quantity%>">
                                         <span id="quantityError" class="validation" style="color: red;"></span>
                                     </div>
                                 </div> <!-- col.// -->
@@ -78,8 +80,11 @@
                                 </div>
                                 <div class="col-md-9">
                                     <div class="mb-4">
-                                        <label class="form-label">Cost in USD</label>
-                                        <input type="text" placeholder="$00.0" name="price" class="form-control" value="<%=productdata.Price%>" >
+                                        <label class="form-label">Cost in Rs</label>
+                                        <input type="text" placeholder="00.0" name="price" class="form-control" value="<%=productdata.Price%>" >
+                                        <label class="form-label">Discount Amount</label>
+                                        <input type="text" placeholder="00.0" name="discountprice" class="form-control" value="0">
+                                        <span id="priceError" class="validation" style="color: red;"></span>
                                     </div>
                                 </div> <!-- col.// -->
                             </div> <!-- row.// -->
@@ -107,7 +112,12 @@
                                 <div class="col-md-9">
                                     <div class="mb-4">
                                         <label class="form-label"></label>
-                                        <input class="form-control" type="file" name="Image2" multiple value="<%=productdata.Image%>">
+                                        <input class="form-control" type="file" name="Image2" multiple >
+                                       
+                                        <% for (let i = 0; i < productdata.Image.length; i++) { %>
+                                          <img src="<%= productdata.Image[i] %>" alt="Product Image <%= i + 1 %>" class="img-thumbnail" style="width: 60px;height: 60px;">
+                                        <% } %>
+                                      
                                     </div>
                                     
                                 </div> <!-- col.// -->
@@ -143,3 +153,65 @@
 
 <!-- Mirrored from wp.alithemes.com/html/evara/evara-backend/page-form-product-2.html by HTTrack Website Copier/3.x [XR&CO'2014], Sun, 01 Aug 2021 15:33:32 GMT -->
 </html>
+
+
+
+
+<script>
+    // Get form fields
+    const form = document.getElementById('addproduct');
+    const nameField = form.elements.name;
+    const descriptionField = form.elements.description;
+    const priceField = form.elements.price;
+   
+    const quantityField = form.elements.quantity;
+
+    // Add event listener to the form on submit
+    form.addEventListener('submit', (event) => {
+        // Prevent form submission
+        event.preventDefault();
+
+        // Validate name field
+        if (!nameField.value.match(/^[a-zA-Z ]+$/)) {
+            nameField.classList.add('is-invalid');
+            document.getElementById('nameError').textContent = 'Please enter a valid name';
+        } else {
+            nameField.classList.remove('is-invalid');
+            document.getElementById('nameError').textContent = '';
+        }
+
+        // Validate description field
+        if (descriptionField.value.length < 20) {
+            descriptionField.classList.add('is-invalid');
+            document.getElementById('descriptionError').textContent = 'Please enter a description of at least 20 characters';
+        } else {
+            descriptionField.classList.remove('is-invalid');
+            document.getElementById('descriptionError').textContent = '';
+        }
+
+        // Validate price field
+        if (isNaN(priceField.value) || priceField.value <= 25) {
+            priceField.classList.add('is-invalid');
+            document.getElementById('priceError').textContent = 'Please enter a positive number above 25';
+        } else {
+            priceField.classList.remove('is-invalid');
+            document.getElementById('priceError').textContent = '';
+        }
+
+        if (isNaN(quantityField.value) || quantityField.value <= 1) {
+            quantityField.classList.add('is-invalid');
+            document.getElementById('quantityError').textContent = 'Please enter a positive number above 1';
+        } else {
+            priceField.classList.remove('is-invalid');
+            document.getElementById('quantityError').textContent = '';
+        }
+
+        // Validate image field
+        
+
+        // If all fields are valid, submit the form
+        if (!nameField.classList.contains('is-invalid') && !descriptionField.classList.contains('is-invalid') && !priceField.classList.contains('is-invalid')) {
+            form.submit();
+        }
+    });
+</script>

@@ -34,36 +34,36 @@
         </div>
         <nav>
             <ul class="menu-aside">
-                <li class="menu-item ">
+                <li class="menu-item <%=locals.dashActice1%>">
                     <a class="menu-link" href="/admin"> <i class="icon material-icons md-home"></i>
                         <span class="text">Dashboard</span>
                     </a>
                 </li>
-                <li class="menu-item ">
+                <li class="menu-item <%=locals.dashActice2%>">
                     <a class="menu-link" href="/admin/view-product"> <i class="icon material-icons md-shopping_bag"></i>
                         <span class="text">Products</span>
                     </a>
                     
                 </li>
-                <li class="menu-item ">
+                <li class="menu-item <%=locals.dashActice3%>">
                     <a class="menu-link" href="/admin/view-orders"> <i class="icon material-icons md-shopping_cart"></i>
                         <span class="text">Orders</span>
                     </a>
                     
                 </li>
-                <li class="menu-item ">
+                <li class="menu-item <%=locals.dashActice4%>">
                     <a class="menu-link" href="/admin/view-users"> <i class="icon material-icons md-store"></i>
                         <span class="text">Users</span>
                     </a>
                     
                 </li>
-                <li class="menu-item ">
+                <li class="menu-item <%=locals.dashActice5%>">
                     <a class="menu-link" href="/admin/add-category"> <i class="icon material-icons md-add_box"></i>
                         <span class="text">Categories</span>
                     </a>
                     
                 </li>
-                <li class="menu-item">
+                <li class="menu-item <%=locals.dashActice6%>">
                     <a class="menu-link" href="/admin/view-coupens"> <i class="icon material-icons md-monetization_on"></i>
                         <span class="text">coupens</span>
                     </a>
@@ -71,7 +71,7 @@
                 </li>
                 
                
-                <li class="menu-item">
+                <li class="menu-item <%=locals.dashActice7%>">
                     <a class="menu-link" href="/admin/view-sales?from&to"> <i class="icon material-icons md-stars"></i>
                         <span class="text">Sales</span> </a>
                 </li>
@@ -106,23 +106,7 @@
         </header>
 
 
-        <script>
-          const menuItems = document.querySelectorAll('.menu-item');
-for (let i = 0; i < menuItems.length; i++) {
-  menuItems[i].addEventListener('click', function(event) {
-    // Remove active class from any previously active menu items
-    const activeMenuItem = document.querySelector('.menu-item.active');
-    if (activeMenuItem) {
-      activeMenuItem.classList.remove('active');
-    }
-
-    // Add active class to clicked menu item
-    event.target.closest('.menu-item').classList.add('active');
-  });
-}
-
-
-        </script>
+        
        
         
         
